@@ -7,15 +7,15 @@ const FichaAnamnese = () => {
     const params = useRoute()
     const navigation = useNavigation<propsStack>()
     console.log(params);
-    
+
     return (
         <View style={{ flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1 }}>
             <Text style={{ fontSize: 20 }}>FichaAnamnese</Text>
 
             <TouchableOpacity
                 style={{ marginTop: 12, padding: 8, backgroundColor: "#BDBDBD" }}
-                onPress={() => navigation.navigate("Video")}>
-                <Text>Video</Text>
+                onPress={() => navigation.navigate("Exercicio")}>
+                <Text>Exerciciooooo</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
