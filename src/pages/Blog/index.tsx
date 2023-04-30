@@ -1,27 +1,36 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native"
+import { View, Text, SafeAreaView, ScrollView } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
+import { Appbar, Button } from "react-native-paper";
 
 const Blog = () => {
     const navigation = useNavigation<propsStack>()
     return (
-        <View style={styles.container}>
-            <Text style={{ fontSize: 20 }}>Home</Text>
+        <>
+            <Appbar.Header style={styles.appBar} >
+                <Appbar.Content title="Blog de Parkinson" />
+            </Appbar.Header>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+                <ScrollView style={styles.scroll}>
+                    <View style={styles.container}>
+                        <Button
+                            style={styles.buttom}
+                            mode="outlined"
+                            onPress={() => navigation.navigate("Blog")}>
+                            <Text>Blog</Text>
+                        </Button>
 
-            <TouchableOpacity
-                style={styles.buttom}
-                onPress={() => navigation.navigate("Blog")}>
-                <Text>Blog</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                style={{ marginTop: 12, padding: 8, backgroundColor: "#BDBDBD" }}
-                onPress={() => navigation.goBack()}>
-                <Text>Voltar</Text>
-            </TouchableOpacity>
-        </View>
+                        <Button
+                            style={styles.buttom}
+                            onPress={() => navigation.goBack()}>
+                            <Text>Voltar</Text>
+                        </Button>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        </>
     )
 }
 

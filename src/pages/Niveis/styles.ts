@@ -4,15 +4,16 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 24,
-        marginTop: 5,
+        padding: 20,
         flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
     },
     buttom: {
-        marginTop: 12,
-        padding: 8,
-        backgroundColor: "#BDBDBD"
+        marginTop: 8
+    },
+    appBar:{
+        backgroundColor: '#f0dbff',
+    },
+    scroll: {
+        flex: 1,
     },
 });

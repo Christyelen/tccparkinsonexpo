@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Button, View, Alert, Text, TouchableOpacity, ActivityIndicator, useWindowDimensions } from "react-native";
+import { View, Alert, ActivityIndicator, useWindowDimensions, SafeAreaView, ScrollView } from "react-native";
 import YoutubePlayer, { PLAYER_STATES } from "react-native-youtube-iframe";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { SCREEN_SPACE, VIDEO_HEIGHT, styles } from "./styles";
 import * as ScreenOrientation from 'expo-screen-orientation';
-//import moment from 'moment';
+import moment from 'moment';
+import { Appbar, Button, Text } from "react-native-paper";
 
 
 const Exercicio = () => {
@@ -30,8 +31,8 @@ const Exercicio = () => {
     const fimExercicio = () => {
         setDataFinal(new Date())
         console.log("setou data final + " + dataFinal.toLocaleString());
-        //const diff = moment(dataFinal).diff(moment(dataInicial), 'days');
-        duracao = "oi";
+        const diff = moment(dataFinal).diff(moment(dataInicial), 'minutes');
+        duracao = diff;
         setPlaying(false);
         setVideoReady(false);
         setIsCounting(false);
@@ -65,38 +66,52 @@ const Exercicio = () => {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <View style={styles.player}>
-                <YoutubePlayer
-                    height={videoReady ? VIDEO_HEIGHT + 20 : 0}
-                    width={VIDEO_WIDTH}
-                    play={playing}
-                    videoId={"iee2TATGMyI"}
-                    onChangeState={onChangeState}
-                    onReady={() => setVideoReady(true)}
-                    onFullScreenChange={onFullScreenChange}
-                />
-            </View>
-            <View style={styles.buttom}>
-                {!videoReady && <ActivityIndicator color="red" />}
-                <Text>
-                    Tempo para realizar o exercicio: {duracao}
-                </Text>
-                {isCounting && (<Button title="Finalizar exercicio" onPress={fimExercicio} />)}
+        <>
+            <Appbar.Header style={styles.appBar} >
+                <Appbar.Content title="App Parkinson" />
+            </Appbar.Header>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+                <ScrollView style={styles.scroll}>
+                    <View style={styles.container}>
+                        <View style={styles.player}>
+                            <YoutubePlayer
+                                height={videoReady ? VIDEO_HEIGHT + 20 : 0}
+                                width={VIDEO_WIDTH}
+                                play={playing}
+                                videoId={"iee2TATGMyI"}
+                                onChangeState={onChangeState}
+                                onReady={() => setVideoReady(true)}
+                                onFullScreenChange={onFullScreenChange}
+                            />
+                        </View>
+                        <View style={styles.buttom}>
+                            {!videoReady && <ActivityIndicator style={styles.load} color="red" />}
+                            <Text>
+                                {'Tempo para realizar o exercicio:' + duracao}
+                            </Text>
+                            {isCounting && (
+                                <Button onPress={fimExercicio}  mode="contained">
+                                    <Text>Finalizar exercicio</Text>
+                                </Button>)}
 
-                <TouchableOpacity
-                    style={{ marginTop: 12, padding: 8, backgroundColor: "#BDBDBD" }}
-                    onPress={() => navigation.navigate("Ofensiva")}>
-                    <Text>Ofensiva Diária</Text>
-                </TouchableOpacity>
+                            <Button
+                                style={styles.buttom}
+                                mode="outlined"
+                                onPress={() => navigation.navigate("Ofensiva")}>
+                                <Text>Ofensiva Diária</Text>
+                            </Button>
 
-                <TouchableOpacity
-                    style={{ marginTop: 12, padding: 8, backgroundColor: "#BDBDBD" }}
-                    onPress={() => navigation.goBack()}>
-                    <Text>Voltar</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+                            <Button
+                                style={styles.buttom}
+                                mode="outlined"
+                                onPress={() => navigation.goBack()}>
+                                <Text>Voltar</Text>
+                            </Button>
+                        </View>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        </>
     );
 }
 

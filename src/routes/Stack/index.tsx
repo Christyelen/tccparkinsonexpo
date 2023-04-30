@@ -22,7 +22,6 @@ export default function(){
             <Screen name="Ofensiva" component={Ofensiva}/>
             <Screen name="PreExercicio" component={PreExercicio}/>
             <Screen name="Blog" component={Blog}/>
-
         </Navigator>
     )
 }

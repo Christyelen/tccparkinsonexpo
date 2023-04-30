@@ -6,21 +6,27 @@ export const SCREEN_SPACE = 24;
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 24,
+        padding: 20,
         flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-start",
+    },
+    buttom: {
+        marginTop: 8
+    },
+    appBar:{
+        backgroundColor: '#f0dbff',
+    },
+    scroll: {
+        flex: 1,
     },
     player: {
-    
+
         alignItems: "center",
         justifyContent: "center",
         margin: 30
     },
-    buttom: {
+    load: {
         flex: 1,
-        flexDirection: "column",
-        alignItems:"flex-start",
-        marginTop: 12,
-    },
+        justifycontent: "center",
+        alignitems: "center"
+    }
 });
