@@ -14,6 +14,7 @@ const FichaAnamnese = () => {
     const [isVisibleSaude, setIsVisibleSaude] = useState(false);
     const [isVisibleRemedio, setIsVisibleRemedio] = useState(false);
     const [isVisibleCuidador, setIsVisibleCuidador] = useState(false);
+    const [isReadOnly, setReadOnly] = useState(false);
     const mostrarCampoSaude = () => {
         setIsVisibleSaude(!isVisibleSaude);
     };
@@ -24,31 +25,48 @@ const FichaAnamnese = () => {
         setIsVisibleCuidador(!isVisibleCuidador);
     };
 
+    const salvarCampos = () => {
+        setarCamposReadOnly();
+    }
+
+    const setarCamposReadOnly = () => {
+        setReadOnly(!isReadOnly);
+    };
+
+    const validarJaPossuiInformacoes = () => {
+        // ver se os campos estao DOMRectReadOnly, se sim o botao salvar vira editar e vice-versa
+    };
+
     return (
         <>
-            {/* <Appbar.Header style={styles.appBar} >
-                <Appbar.Content title="Ficha Anamnese" />
-            </Appbar.Header> */}
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
+
                         <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-
-                        <Button icon="content-save-outline" mode="contained" style={styles.buttom}
-                            onPress={() => navigation.goBack()}>
+                        {!isReadOnly && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                            onPress={salvarCampos}>
                             Salvar
-                        </Button>
+                        </Button>}
+
+                        {isReadOnly && <Button icon="pencil-outline" mode="contained" style={styles.buttom}
+                            onPress={salvarCampos}>
+                            Editar
+                        </Button>}
+
                     </View>
 
                     <View style={styles.container}>
-
+                        {/* campo com edição ReadOnly */}
                         <Text style={styles.textGroup}>Dados do Paciente</Text>
-                        <TextInput style={styles.campostexto}
+                        <TextInput style={styles.campostexto} editable={false}
                             mode="outlined"
                             label="Nome"
+                            value="Christyelen"
+                            theme={{ colors: { background: '#F2F2F2' } }}
                         />
                         <TextInput style={styles.campostexto}
                             mode="outlined"
@@ -94,23 +112,26 @@ const FichaAnamnese = () => {
                             <Checkbox.Android
                                 status={isVisibleSaude ? 'checked' : 'unchecked'}
                                 onPress={mostrarCampoSaude} />
+                            <Text style={{ alignSelf: "center" }}>Possui plano de saúde?</Text>
+                        </View>
+                        <View>
                             {isVisibleSaude && <TextInput style={styles.campostexto}
                                 mode="outlined"
                                 label="Cartão Nacional da Saúde"
                             />}
-                            <Text style={{ alignSelf: "center" }}>Possui plano de saúde?</Text>
                         </View>
 
                         <View style={{ flexDirection: "row" }}>
                             <Checkbox.Android
                                 status={isVisibleRemedio ? 'checked' : 'unchecked'}
                                 onPress={mostrarCampoRemedio} />
+                            <Text style={{ alignSelf: "center" }}>Você toma remédios?</Text>
+                        </View>
+                        <View>
                             {isVisibleRemedio && <TextInput style={styles.campostexto}
                                 mode="outlined"
                                 label="Remédios utilizados"
                             />}
-                            <Text style={{ alignSelf: "center" }}>Você toma remédios?</Text>
-
                         </View>
                         <Text style={styles.textGroup}>Endereço</Text>
 
@@ -153,20 +174,21 @@ const FichaAnamnese = () => {
                             <Checkbox.Android
                                 status={isVisibleCuidador ? 'checked' : 'unchecked'}
                                 onPress={mostrarCampoCuidador} />
-
-                                {isVisibleCuidador &&
-                                    <TextInput style={styles.campostexto}
-                                        mode="outlined"
-                                        label="Nome do Cuidador"
-                                    />}
-
-                                {isVisibleCuidador &&
-                                    <TextInput style={styles.campostexto}
-                                        mode="outlined"
-                                        label="CPF"
-                                    />}
-
                             <Text style={{ alignSelf: "center" }}>Possui cuidador?</Text>
+                        </View>
+                        <View>
+                            {isVisibleCuidador &&
+                                <TextInput style={styles.campostexto}
+                                    mode="outlined"
+                                    label="Nome do Cuidador"
+                                />}
+                        </View>
+                        <View>
+                            {isVisibleCuidador &&
+                                <TextInput style={styles.campostexto}
+                                    mode="outlined"
+                                    label="CPF"
+                                />}
                         </View>
                     </View>
                 </ScrollView>

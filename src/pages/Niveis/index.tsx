@@ -9,46 +9,45 @@ const Niveis = () => {
     const navigation = useNavigation<propsStack>()
     return (
         <>
-            <Appbar.Header style={styles.appBar} >
-                <Appbar.Content title="Selecione um nivel" />
-            </Appbar.Header>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
                 <ScrollView style={styles.scroll}>
-                    <View style={styles.container}>
-                        <Button
-                            style={styles.buttom}
-                            onPress={() => navigation.navigate("PreExercicio", { nivel: '1' })}
-                            mode="outlined">
-                            <Text>Nivel 1</Text>
+                    <View style={styles.containerBotoes}>
+                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                            onPress={() => navigation.goBack()}>
+                            Voltar
                         </Button>
+                    </View>
 
-                        <Button
-                            style={styles.buttom}
-                            onPress={() => navigation.navigate("PreExercicio", { nivel: '2' })}
-                            mode="outlined">
-                            <Text>Nivel 2</Text>
-                        </Button>
+                    <View style={styles.containerBotoes}>
+                        <View style={styles.container}>
+                            <Button
+                                style={styles.buttom}
+                                onPress={() => navigation.navigate("PreExercicio", { nivel: '1' })}
+                                mode="contained">
+                                <Text>Nivel 1</Text>
+                            </Button>
 
-                        <Button
-                            style={styles.buttom}
-                            onPress={() => navigation.navigate("PreExercicio", { nivel: '3' })}
-                            mode="outlined">
-                            <Text>Nivel 3</Text>
-                        </Button>
+                            <Button
+                                style={styles.buttom}
+                                onPress={() => navigation.navigate("PreExercicio", { nivel: '2' })}
+                                mode="contained">
+                                <Text>Nivel 2</Text>
+                            </Button>
 
-                        <Button
-                            style={styles.buttom}
-                            onPress={() => navigation.navigate("PreExercicio", { nivel: '4' })}
-                            mode="outlined">
-                            <Text>Nivel 4</Text>
-                        </Button>
+                            <Button
+                                style={styles.buttom}
+                                onPress={() => navigation.navigate("PreExercicio", { nivel: '3' })}
+                                mode="contained">
+                                <Text>Nivel 3</Text>
+                            </Button>
 
-                        <Button
-                            style={styles.buttom}
-                            onPress={() => navigation.goBack()}
-                            mode="outlined">
-                            <Text>Voltar</Text>
-                        </Button>
+                            <Button
+                                style={styles.buttom}
+                                onPress={() => navigation.navigate("PreExercicio", { nivel: '4' })}
+                                mode="contained">
+                                <Text>Nivel 4</Text>
+                            </Button>
+                        </View>
                     </View>
                 </ScrollView>
             </SafeAreaView>

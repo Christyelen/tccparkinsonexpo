@@ -67,11 +67,17 @@ const Exercicio = () => {
 
     return (
         <>
-            <Appbar.Header style={styles.appBar} >
-                <Appbar.Content title="App Parkinson" />
-            </Appbar.Header>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
                 <ScrollView style={styles.scroll}>
+                    <View style={styles.containerBotoes}>
+                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                            onPress={() => navigation.goBack()}>
+                            Voltar
+                        </Button>
+                        <Button icon="flag-checkered" mode="contained" style={styles.buttom}>
+                            Ofensiva Diária
+                        </Button>
+                    </View>
                     <View style={styles.container}>
                         <View style={styles.player}>
                             <YoutubePlayer
@@ -84,29 +90,15 @@ const Exercicio = () => {
                                 onFullScreenChange={onFullScreenChange}
                             />
                         </View>
-                        <View style={styles.buttom}>
+                        <View>
                             {!videoReady && <ActivityIndicator style={styles.load} color="red" />}
                             <Text>
                                 {'Tempo para realizar o exercicio:' + duracao}
                             </Text>
-                            {isCounting && (
-                                <Button onPress={fimExercicio}  mode="contained">
-                                    <Text>Finalizar exercicio</Text>
-                                </Button>)}
-
-                            <Button
-                                style={styles.buttom}
-                                mode="outlined"
-                                onPress={() => navigation.navigate("Ofensiva")}>
-                                <Text>Ofensiva Diária</Text>
-                            </Button>
-
-                            <Button
-                                style={styles.buttom}
-                                mode="outlined"
-                                onPress={() => navigation.goBack()}>
-                                <Text>Voltar</Text>
-                            </Button>
+                            {isCounting && 
+                                <Button onPress={fimExercicio} style={styles.buttom} mode="contained" icon="check">
+                                    Finalizar exercicios
+                                </Button>}
                         </View>
                     </View>
                 </ScrollView>

@@ -6,8 +6,9 @@ import { styles } from "./styles";
 import { Appbar, Button } from "react-native-paper";
 
 const PreExercicio = () => {
-    const params = useRoute()
+    const route = useRoute()
     const navigation = useNavigation<propsStack>()
+   // const parametro = route.params?.name ?? '';
     let video1 = "";
     let video2 = "";
     let video3 = "";
@@ -23,7 +24,8 @@ const PreExercicio = () => {
                         </Button>
 
                         <Button style={styles.buttom}
-                            mode="outlined"
+                            mode="contained"
+                            icon="run"
                             onPress={() => { navigation.navigate("Exercicio", { idVideo1: video1, idVideo2: video2, idVideo03: video3 }) }}>
                             <Text>Exercicio</Text>
                         </Button>
@@ -32,7 +34,7 @@ const PreExercicio = () => {
                     <View style={styles.container}>
                         <Text style={{ fontSize: 20 }}>Pre Exercicio</Text>
 
-                        <Text style={{ fontSize: 15 }}>Descrição: blá blá blá</Text>
+                        <Text style={{ fontSize: 15, marginTop: 20}}>Descrição: blá blá blá</Text>
 
                     </View>
                 </ScrollView>

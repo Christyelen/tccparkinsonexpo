@@ -6,9 +6,11 @@ export const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         flexDirection: "column",
+        alignItems:"center"
     },
     buttom: {
-        marginTop: 8
+        marginTop: 30,
+        width: 100
     },
     appBar:{
         backgroundColor: '#f0dbff',
@@ -16,4 +18,11 @@ export const styles = StyleSheet.create({
     scroll: {
         flex: 1,
     },
+    containerBotoes: {
+        flexDirection: "row",
+        justifyContent:"space-between",
+        marginLeft: 20,
+        marginRight:20
+    },
+    
 });

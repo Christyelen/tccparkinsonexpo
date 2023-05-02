@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native"; 
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
@@ -9,10 +9,16 @@ export const styles = StyleSheet.create({
     buttom: {
         marginTop: 8
     },
-    appBar:{
+    appBar: {
         backgroundColor: '#f0dbff',
     },
     scroll: {
         flex: 1,
+    }, 
+    containerBotoes: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginLeft: 20,
+        marginRight: 20
     },
 })

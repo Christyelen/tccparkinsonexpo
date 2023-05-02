@@ -1,5 +1,4 @@
 import{ NativeStackNavigationProp} from "@react-navigation/native-stack"
-import { Double } from "react-native/Libraries/Types/CodegenTypes"
 
 export type propsNavigationStack = {
     Home: undefined

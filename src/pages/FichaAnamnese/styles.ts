@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     },
     campostexto: {
         width: '100%',
-        marginTop: 5
+        marginTop: 5,
     },
     containerBotoes: {
         flexDirection: "row",

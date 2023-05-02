@@ -15,4 +15,10 @@ export const styles = StyleSheet.create({
     scroll: {
         flex: 1,
     },
+    containerBotoes: {
+        flexDirection: "row",
+        justifyContent:"space-between",
+        marginLeft: 20,
+        marginRight:20
+    },
 })

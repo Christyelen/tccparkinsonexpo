@@ -28,5 +28,11 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifycontent: "center",
         alignitems: "center"
-    }
+    },
+    containerBotoes: {
+        flexDirection: "row",
+        justifyContent:"space-between",
+        marginLeft: 20,
+        marginRight:20
+    },
 });
