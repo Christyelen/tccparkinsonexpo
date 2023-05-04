@@ -74,7 +74,7 @@ const Exercicio = () => {
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button icon="flag-checkered" mode="contained" style={styles.buttom}>
+                        <Button icon="flag-checkered" mode="contained" style={styles.buttom}  onPress={() => navigation.navigate('Ofensiva')}>
                             Ofensiva Diária
                         </Button>
                     </View>

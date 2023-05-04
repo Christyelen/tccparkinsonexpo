@@ -9,9 +9,7 @@ export const styles = StyleSheet.create({
         alignItems:"center"
     },
     buttom: {
-        marginTop: 50,
-        height: 60,
-        width: '100%'
+        marginTop: 8
     },
     appBar: {
         backgroundColor: '#f0dbff',
@@ -32,11 +30,25 @@ export const styles = StyleSheet.create({
     },
     containerBotoes: {
         flexDirection: "row",
-        justifyContent:"flex-end",
+        justifyContent:"space-between",
         marginLeft: 20,
         marginRight:20
     },
-    buttomAdm: {
-        marginTop: 8
+    campostexto: {
+        width: '100%',
+        marginTop: 5,
     },
+    containerLista: {
+        flex: 1,
+        padding: 16,
+    },
+    listAccordion: {
+        marginTop: -8,
+    },
+    selectedItem: {
+        backgroundColor: '#f2f2f2',
+    },
+    listagem:{
+        width:'100%'
+    }
 })

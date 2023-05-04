@@ -21,4 +21,11 @@ export const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight:20
     },
+    textGroup: {
+        fontSize: 20,
+        margin: 8,
+        fontWeight: "bold",
+        color: '#663399',
+        alignSelf:"center"
+    },
 })

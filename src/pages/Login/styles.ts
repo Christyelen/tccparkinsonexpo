@@ -13,8 +13,8 @@ export const styles = StyleSheet.create({
         height: 60,
         width: '100%'
     },
-    appBar: {
-        backgroundColor: '#f0dbff',
+    buttonCabecalho:{
+        marginTop: 8
     },
     scroll: {
         flex: 1,
@@ -30,13 +30,15 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
         color: '#663399'
     },
+    campostexto: {
+        width: '100%',
+        marginTop: 5,
+    },
     containerBotoes: {
         flexDirection: "row",
-        justifyContent:"flex-end",
+        justifyContent:"space-between",
         marginLeft: 20,
         marginRight:20
     },
-    buttomAdm: {
-        marginTop: 8
-    },
+
 })

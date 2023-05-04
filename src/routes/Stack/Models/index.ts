@@ -16,6 +16,11 @@ export type propsNavigationStack = {
     }
     Ofensiva: undefined
     Niveis: undefined
+    Login: undefined
+    CadastroAdm: undefined
+    CadastroVideo: undefined
+    CadastroNiveis: undefined
+    CadastroBlog: undefined
 }
 
 export type propsStack = NativeStackNavigationProp<propsNavigationStack>

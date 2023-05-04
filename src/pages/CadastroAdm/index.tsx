@@ -5,53 +5,44 @@ import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
 import { Appbar, Button } from "react-native-paper";
 
-const Home = () => {
+const CadastroAdm = () => {
     const navigation = useNavigation<propsStack>()
     return (
         <>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="security" mode="outlined" style={styles.buttomAdm}
-                            onPress={() => navigation.navigate("Login")}>
-                            Area do administrador
+
+                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttonCabecalho}
+                            onPress={() => navigation.goBack()}>
+                            Voltar
                         </Button>
                     </View>
                     <View style={styles.container}>
-                        <Image
-                            source={require('../../../assets/imagens/LogoApp.png')}
-                            style={{ width: 200, height: 200, margin: 10, alignSelf: "center" }} />
-                        <Text style={styles.textGroup} > App Parkinson </Text>
+                        <Text style={styles.textGroup}>Área do Administrador</Text>
+
                         <Button
                             mode="contained"
                             style={styles.buttom}
                             labelStyle={styles.textButton}
-                            onPress={() => navigation.navigate("Niveis")}>
-                            <Text>Níveis</Text>
+                            onPress={() => navigation.navigate("CadastroVideo")}>
+                            <Text>Cadastrar novos videos</Text>
                         </Button>
 
                         <Button
                             mode="contained"
                             style={styles.buttom}
                             labelStyle={styles.textButton}
-                            onPress={() => navigation.navigate("FichaAnamnese", { name: "Chris" })}>
-                            <Text>Ficha Anamnese</Text>
+                            onPress={() => navigation.navigate("CadastroNiveis")}>
+                            <Text>Cadastrar novos niveis</Text>
                         </Button>
 
                         <Button
                             mode="contained"
                             style={styles.buttom}
                             labelStyle={styles.textButton}
-                            onPress={() => navigation.navigate("Ofensiva")}>
-                            <Text>Ofensiva</Text>
-                        </Button>
-
-                        <Button
-                            mode="contained"
-                            style={styles.buttom}
-                            labelStyle={styles.textButton}
-                            onPress={() => navigation.navigate("Blog")}>
-                            <Text>Blog</Text>
+                            onPress={() => navigation.navigate("CadastroBlog")}>
+                            <Text>Cadastrar registros Blog</Text>
                         </Button>
                     </View>
                 </ScrollView>
@@ -60,4 +51,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default CadastroAdm

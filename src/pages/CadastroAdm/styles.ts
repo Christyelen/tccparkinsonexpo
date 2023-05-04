@@ -32,11 +32,15 @@ export const styles = StyleSheet.create({
     },
     containerBotoes: {
         flexDirection: "row",
-        justifyContent:"flex-end",
+        justifyContent:"space-between",
         marginLeft: 20,
         marginRight:20
     },
-    buttomAdm: {
-        marginTop: 8
+    campostexto: {
+        width: '100%',
+        marginTop: 5,
     },
+    buttonCabecalho:{
+        marginTop: 8
+    }
 })

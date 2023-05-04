@@ -9,6 +9,11 @@ import Blog from "../../pages/Blog"
 import Niveis from "../../pages/Niveis"
 import Ofensiva from "../../pages/Ofensiva"
 import PreExercicio from "../../pages/PreExercicio"
+import Login from "../../pages/Login";
+import CadastroAdm from "../../pages/CadastroAdm";
+import CadastroVideo from "../../pages/CadastroVideo";
+import CadastroNives from "../../pages/CadastroNiveis";
+import CadastroBlog from "../../pages/CadastroBlog";
 
 const {Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
 
@@ -22,6 +27,11 @@ export default function(){
             <Screen name="Ofensiva" component={Ofensiva}/>
             <Screen name="PreExercicio" component={PreExercicio}/>
             <Screen name="Blog" component={Blog}/>
+            <Screen name="Login" component={Login}/>
+            <Screen name="CadastroAdm" component={CadastroAdm} />
+            <Screen name="CadastroVideo" component={CadastroVideo} />
+            <Screen name="CadastroNiveis" component={CadastroNives} />
+            <Screen name="CadastroBlog" component={CadastroBlog} />
         </Navigator>
     )
 }

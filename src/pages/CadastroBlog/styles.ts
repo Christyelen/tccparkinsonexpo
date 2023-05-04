@@ -6,12 +6,10 @@ export const styles = StyleSheet.create({
         padding: 20,
         flexDirection: "column",
         justifyContent: "center",
-        alignItems:"center"
+        alignItems: "center"
     },
     buttom: {
-        marginTop: 50,
-        height: 60,
-        width: '100%'
+        marginTop: 8
     },
     appBar: {
         backgroundColor: '#f0dbff',
@@ -32,11 +30,26 @@ export const styles = StyleSheet.create({
     },
     containerBotoes: {
         flexDirection: "row",
-        justifyContent:"flex-end",
+        justifyContent: "space-between",
         marginLeft: 20,
-        marginRight:20
+        marginRight: 20
     },
-    buttomAdm: {
+    campostexto: {
+        width: '100%',
+        marginTop: 5,
+    },
+    image: {
+        width: 200,
+        height: 200,
+        borderRadius: 100,
+    },
+    buttomImage: {
+        borderRadius: 5
+    },
+    containerImage: {
+        justifyContent:"center",
+        alignSelf:"center",
+        width: '100%',
         marginTop: 8
-    },
+    }
 })
