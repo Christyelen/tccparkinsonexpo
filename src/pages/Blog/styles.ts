@@ -34,4 +34,8 @@ export const styles = StyleSheet.create({
         color: '#663399',
         alignSelf: "center"
     },
+    campostexto: {
+        width: '100%',
+        marginTop: 5,
+    },
 })

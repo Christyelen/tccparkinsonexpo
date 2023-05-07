@@ -20,7 +20,8 @@ const PreExercicio = (props) => {
         });
     };
 
-    const buscarInformacoesNivel = async (nivel) => {
+    const buscarInformacoesNivel = async (nivel) => 
+    {
         //fingir q voltou isso do banco
 
         setLoading(true);
