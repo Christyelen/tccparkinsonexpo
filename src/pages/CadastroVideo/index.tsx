@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, Image, SafeAreaView, ScrollView } from "react-native"
+import { View, Text, SafeAreaView, ScrollView } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
-import { Appbar, Button, List, TextInput } from "react-native-paper";
-import Grid from '../../componentes/Grid';
+import { Button, List, TextInput } from "react-native-paper";
 
 const data = [
     { id: 1, title: 'Item 1', description: 'Descrição do item 1' },
@@ -17,7 +16,6 @@ const data = [
 
 const CadastroVideo = () => {
     const navigation = useNavigation<propsStack>()
-
     const [text, setText] = useState('');
     const [expanded, setExpanded] = React.useState(true);
 
