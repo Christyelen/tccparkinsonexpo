@@ -24,11 +24,12 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         margin: 30
     },
-    load: {
-        flex: 1,
-        justifycontent: "center",
-        alignitems: "center"
-    },
+    loadingContainer: {
+        position: 'relative',
+        borderRadius: 10,
+        padding: 10,
+        color: "#663399"
+      },
     containerBotoes: {
         flexDirection: "row",
         justifyContent:"space-between",

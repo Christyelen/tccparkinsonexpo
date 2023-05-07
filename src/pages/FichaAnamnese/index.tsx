@@ -1,16 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from "react-native"
+import { View, Text, ScrollView, SafeAreaView } from "react-native"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { propsStack } from "../../routes/Stack/Models";
 import { TextInput, Button, Appbar, Checkbox } from 'react-native-paper';
 import { styles } from "./styles";
 
-const FichaAnamnese = () => {
-    const params = useRoute()
-    //let teste= params.params.name;
-    //console.log('teste' + ' ' +  params.params.name)
+const FichaAnamnese = (props) => {
+    let teste = props.route.params.name;
     const navigation = useNavigation<propsStack>()
-    console.log(params);
     const [isVisibleSaude, setIsVisibleSaude] = useState(false);
     const [isVisibleRemedio, setIsVisibleRemedio] = useState(false);
     const [isVisibleCuidador, setIsVisibleCuidador] = useState(false);
@@ -42,7 +39,6 @@ const FichaAnamnese = () => {
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-
                         <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
                             onPress={() => navigation.goBack()}>
                             Voltar

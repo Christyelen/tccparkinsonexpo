@@ -3,17 +3,16 @@ import { View, Text, Image, SafeAreaView, ScrollView } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
-import { Appbar, Button, TextInput } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 
 const CadastroBlog = () => {
     const navigation = useNavigation<propsStack>()
+    const [image, setImage] = useState(null);
 
     const salvarCampos = () => {
         console.log("salvou")
     }
-
-    const [image, setImage] = useState(null);
 
     const handleImageSelect = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({

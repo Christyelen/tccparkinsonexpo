@@ -1,42 +1,49 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { View, Alert, ActivityIndicator, useWindowDimensions, SafeAreaView, ScrollView } from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, useWindowDimensions, SafeAreaView, ScrollView } from "react-native";
 import YoutubePlayer, { PLAYER_STATES } from "react-native-youtube-iframe";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { SCREEN_SPACE, VIDEO_HEIGHT, styles } from "./styles";
 import * as ScreenOrientation from 'expo-screen-orientation';
-import moment from 'moment';
-import { Appbar, Button, Text } from "react-native-paper";
+import { Button, Text, ActivityIndicator } from "react-native-paper";
 
 
-const Exercicio = () => {
-
-    const params = useRoute()
-    //console.log("params exercicio: "+ params.params.idVideo1)
-    const [playing, setPlaying] = useState(false);
+const Exercicio = (props) => {
+    
     const navigation = useNavigation<propsStack>();
-    const [videoReady, setVideoReady] = useState(false);
+   
     const { width } = useWindowDimensions();
     const VIDEO_WIDTH = width - (SCREEN_SPACE * 2);
-    let [isCounting, setIsCounting] = useState(false);
-    let [dataFinal, setDataFinal] = useState(new Date());
-    let [dataInicial, setDataInicial] = useState(new Date());
+
+    const [playing, setPlaying] = useState(false);
+    const [videoReady, setVideoReady] = useState(false);
+    const [isCounting, setIsCounting] = useState(false);
+    const [currentVideo, setCurrentVideo] = useState(1);
+    const [fimExercicios, setfimExercicios] = useState(false);
+
     let duracao;
 
     const inicioExercicio = () => {
-        setDataInicial(new Date());
-        console.log("setou data inicial + " + dataInicial.toLocaleString())
+       // setDataInicial(new Date());
     };
 
-    const fimExercicio = () => {
-        setDataFinal(new Date())
-        console.log("setou data final + " + dataFinal.toLocaleString());
-        const diff = moment(dataFinal).diff(moment(dataInicial), 'minutes');
-        duracao = diff;
+    const ProximoExercicio = () => {
         setPlaying(false);
         setVideoReady(false);
         setIsCounting(false);
+        handleVideoEnd();
     }
+
+    const fimExercicio = () => {
+        setVideoReady(false);
+        setIsCounting(false);
+        setfimExercicios(true);
+        setPlaying(false);
+    }
+
+    const handleVideoEnd = () => {
+        setCurrentVideo((currentVideo + 1) != 4 ? currentVideo + 1 : 4);
+    };
 
     const onChangeState = useCallback((state) => {
         if (state === PLAYER_STATES.ENDED) {
@@ -44,11 +51,9 @@ const Exercicio = () => {
             togglePlaying();
         }
         else if (state === PLAYER_STATES.PLAYING) {
-            console.log("antes do if:" + isCounting);
             if (!isCounting) {
                 inicioExercicio();
                 setIsCounting(true);
-                console.log("dentro do if:" + isCounting);
             }
         }
     }, []);
@@ -74,28 +79,54 @@ const Exercicio = () => {
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button icon="flag-checkered" mode="contained" style={styles.buttom}  onPress={() => navigation.navigate('Ofensiva')}>
+                        <Button icon="flag-checkered" mode="contained" style={styles.buttom} onPress={() => navigation.navigate('Ofensiva')}>
                             Ofensiva Diária
                         </Button>
                     </View>
                     <View style={styles.container}>
                         <View style={styles.player}>
-                            <YoutubePlayer
+                            {currentVideo == 1 && <YoutubePlayer
                                 height={videoReady ? VIDEO_HEIGHT + 20 : 0}
                                 width={VIDEO_WIDTH}
                                 play={playing}
-                                videoId={"iee2TATGMyI"}
+                                videoId={props.route.params.idVideo1}
                                 onChangeState={onChangeState}
                                 onReady={() => setVideoReady(true)}
                                 onFullScreenChange={onFullScreenChange}
-                            />
+                            />}
+                        </View>
+                        <View style={styles.player}>
+                            {currentVideo == 2 && <YoutubePlayer
+                                height={videoReady ? VIDEO_HEIGHT + 20 : 0}
+                                width={VIDEO_WIDTH}
+                                play={playing}
+                                videoId={props.route.params.idVideo2}
+                                onChangeState={onChangeState}
+                                onReady={() => setVideoReady(true)}
+                                onFullScreenChange={onFullScreenChange}
+                            />}
+                        </View>
+                        <View style={styles.player}>
+                            {currentVideo == 3 && <YoutubePlayer
+                                height={videoReady ? VIDEO_HEIGHT + 20 : 0}
+                                width={VIDEO_WIDTH}
+                                play={playing}
+                                videoId={props.route.params.idVideo03}
+                                onChangeState={onChangeState}
+                                onReady={() => setVideoReady(true)}
+                                onFullScreenChange={onFullScreenChange}
+                            />}
                         </View>
                         <View>
-                            {!videoReady && <ActivityIndicator style={styles.load} color="red" />}
+                            {!videoReady && !fimExercicios && <ActivityIndicator style={styles.loadingContainer} />}
                             <Text>
                                 {'Tempo para realizar o exercicio:' + duracao}
                             </Text>
-                            {isCounting && 
+                            {isCounting && currentVideo != 3 &&
+                                <Button onPress={ProximoExercicio} style={styles.buttom} mode="contained" icon="arrow-right-circle-outline">
+                                    Próximo exercicio
+                                </Button>}
+                            {isCounting && currentVideo == 3 &&
                                 <Button onPress={fimExercicio} style={styles.buttom} mode="contained" icon="check">
                                     Finalizar exercicios
                                 </Button>}

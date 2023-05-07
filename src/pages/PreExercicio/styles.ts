@@ -2,23 +2,34 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 20,
-        flexDirection: "column",
+        justifyContent: 'center',
+        paddingBottom: 70
     },
+    loadingContainer: {
+        position: 'relative',
+        borderRadius: 10,
+        padding: 10,
+        color: "#663399"
+    },
+
     buttom: {
         marginTop: 8
     },
-    appBar:{
+    appBar: {
         backgroundColor: '#f0dbff',
-    },
-    scroll: {
-        flex: 1,
     },
     containerBotoes: {
         flexDirection: "row",
-        justifyContent:"space-between",
+        justifyContent: "space-between",
         marginLeft: 20,
-        marginRight:20
+        marginRight: 20
     },
+    title: {
+        fontSize: 30,
+        fontWeight: 'bold',
+    },
+    description: {
+        fontSize: 20,
+    },
+
 });

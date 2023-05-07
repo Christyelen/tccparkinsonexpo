@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, Image, SafeAreaView, ScrollView } from "react-native"
+import { View, Text, SafeAreaView, ScrollView } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
-import { Appbar, Button, TextInput, shadow } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import { styles } from "../Login/styles";
 
 const Login = () => {
