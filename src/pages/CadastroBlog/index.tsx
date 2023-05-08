@@ -5,13 +5,22 @@ import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
 import { Button, TextInput } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
+import { addDoc, collection } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../../firebaseConfig";
 
 const CadastroBlog = () => {
     const navigation = useNavigation<propsStack>()
-    const [image, setImage] = useState(null);
+    const [urlimage, setURLImage] = useState('');
+    const [image, setImage] = useState('');
+    const [titulo, setTitulo] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [urlMateria, setUrlMateria] = useState('null');
+    const [materia, setMateria] = useState('')
 
-    const salvarCampos = () => {
-        console.log("salvou")
+    const addMateria = async () => {
+        const doc = await addDoc(collection(FIRESTORE_DB, 'blog'), { titulo: titulo, descricao: descricao, urlImage: urlimage, urlMateria: urlMateria});
+        console.log('Passou')
+        setMateria('');
     }
 
     const handleImageSelect = async () => {
@@ -21,9 +30,10 @@ const CadastroBlog = () => {
             aspect: [4, 3],
             quality: 1,
         });
+        console.log(result);
 
         if (!result.canceled) {
-            // setImage(result.uri);
+             setURLImage('../../../assets/imagens/LogoApp.png');
         }
     };
 
@@ -39,7 +49,7 @@ const CadastroBlog = () => {
                             Voltar
                         </Button>
                         <Button icon="content-save-outline" mode="contained" style={styles.buttom}
-                            onPress={salvarCampos}>
+                            onPress={addMateria}>
                             Salvar
                         </Button>
 
@@ -50,6 +60,8 @@ const CadastroBlog = () => {
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Titulo da Matéria"
+                            onChangeText={(text: string) => setTitulo(text)}
+                            value={titulo}
                         />
 
                         <TextInput style={styles.campostexto}
@@ -57,16 +69,20 @@ const CadastroBlog = () => {
                             label="Texto da Matéria"
                             multiline
                             numberOfLines={4}
+                            onChangeText={(text: string) => setDescricao(text)}
+                            value={descricao}
                         />
 
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Url da matéria"
+                            onChangeText={(text: string) => setUrlMateria(text)}
+                            value={urlMateria}
                         />
 
                         <View style={styles.containerImage}>
                             {image ? (
-                                <Image source={{ uri: image }} style={styles.image} />
+                                <Image source={{ uri: image }} style={styles.image}/>
                             ) : (
                                 <Button mode="outlined" style={styles.buttomImage} icon={'camera-outline'} onPress={handleImageSelect}>
                                     Selecionar imagem para matéria

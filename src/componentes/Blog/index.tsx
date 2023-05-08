@@ -4,13 +4,9 @@ import { TouchableRipple, Card, Paragraph } from 'react-native-paper';
 
 const CardBlog = ({ titulo, descricao, url, imagem }) => {
     const handlePress = (url) => {
+        console.log('passou p ir p url')
         Linking.openURL(url);
     };
-
-    //ver sobre fazer a imagem tambem vir de parametro
-    const setarImagem = (imagem) =>{
-        require('../../../assets/imagens/LogoApp.png');
-    }
 
     return (
         <View style={styles.card}>
@@ -20,7 +16,7 @@ const CardBlog = ({ titulo, descricao, url, imagem }) => {
                     <Card.Content>
                         <Paragraph>{descricao}</Paragraph>
                     </Card.Content>
-                    <Card.Cover style={{ backgroundColor: '#f0dbff' }} source={require('../../../assets/imagens/LogoApp.png')} />
+                    <Card.Cover style={{ backgroundColor: '#f0dbff' }} source={imagem} />
                 </Card>
             </TouchableRipple>
         </View>
