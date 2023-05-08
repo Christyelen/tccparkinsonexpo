@@ -4,9 +4,18 @@ import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
 import { Button } from "react-native-paper";
+import { getAuth, signOut } from "firebase/auth";
 
 const CadastroAdm = () => {
     const navigation = useNavigation<propsStack>()
+
+    const handleSignOut = () => {
+        const auth = getAuth()
+        signOut(auth).then(() => {
+            navigation.replace("Login");
+        }).catch(error => alert(error.message))
+    }
+
     return (
         <>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
@@ -14,8 +23,8 @@ const CadastroAdm = () => {
                     <View style={styles.containerBotoes}>
 
                         <Button icon="arrow-left-circle" mode="outlined" style={styles.buttonCabecalho}
-                            onPress={() => navigation.goBack()}>
-                            Voltar
+                            onPress={handleSignOut}>
+                            Sair
                         </Button>
                     </View>
                     <View style={styles.container}>

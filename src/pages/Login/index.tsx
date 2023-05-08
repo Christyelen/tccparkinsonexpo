@@ -1,15 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, ScrollView } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { Button, TextInput } from "react-native-paper";
 import { styles } from "../Login/styles";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
     const navigation = useNavigation<propsStack>()
-
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const auth = getAuth();
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (user) {
+                navigation.replace("CadastroAdm");
+            }
+        })
+        return unsubscribe;
+    }, [])
+
+
+    const signUp = () => {
+        const after = createUserWithEmailAndPassword(auth, email, password).then(userCredentials => {
+            const user = userCredentials.user;
+        }).catch(error => alert(error.message));
+    }
+
+    const signIn = () => {
+        const user = signInWithEmailAndPassword(auth, email, password).then(userCredentials => {
+            const user = userCredentials.user;
+        }).catch(error => alert(error.message));;
+    }
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -29,11 +53,15 @@ const Login = () => {
                         <Text style={styles.textGroup}>Área do Administrador</Text>
                         <TextInput style={styles.campostexto}
                             mode="outlined"
-                            label="Login"
+                            label="Email"
+                            value={email}
+                            onChangeText={(text: string) => setEmail(text)}
                         />
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Senha"
+                            value={password}
+                            onChangeText={(text: string) => setPassword(text)}
                             secureTextEntry={!showPassword}
                             right={<TextInput.Icon icon="eye" onPress={toggleShowPassword} />}
                         />
@@ -41,7 +69,14 @@ const Login = () => {
                             mode="contained"
                             style={styles.buttom}
                             labelStyle={styles.textButton}
-                            onPress={() => navigation.navigate("CadastroAdm")}>
+                            onPress={signUp}>
+                            <Text>Criar novo usuário</Text>
+                        </Button>
+                        <Button
+                            mode="contained"
+                            style={styles.buttom}
+                            labelStyle={styles.textButton}
+                            onPress={signIn}>
                             <Text>Entrar</Text>
                         </Button>
                     </View>
