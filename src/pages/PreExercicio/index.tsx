@@ -4,94 +4,36 @@ import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
 import { ActivityIndicator, Button, List, } from "react-native-paper";
+import { collection, onSnapshot } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../../firebaseConfig";
 
 const PreExercicio = (props) => {
     const navigation = useNavigation<propsStack>();
-    const [listaExercicio, setlistaExercicio] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [listaPreExercicio, setlistaPreExercicio] = useState([]);
 
     useEffect(() => {
-        buscarInformacoesNivel(props.route.params.nivel);
+        buscarPreExercicio(props.route.params.nivel);
     }, []);
 
-    const delay = (milliseconds) => {
-        return new Promise((resolve) => {
-            setTimeout(resolve, milliseconds);
-        });
-    };
-
-    const buscarInformacoesNivel = async (nivel) => 
-    {
-        //fingir q voltou isso do banco
-
-        setLoading(true);
+    const buscarPreExercicio = (nivel) => {
         try {
-            setLoading(true);
-
-            await delay(1000);
-
-            const teste = [
-                {
-                    id: 1,
-                    titulo: 'Exercicio sentar na cadeira',
-                    descricao: "Para realizar o exercicio você ira necessitar de uma cadeira",
-                    idVideo: 'iee2TATGMyI'
-                },
-                {
-                    id: 2,
-                    titulo: 'Exercicio levantar e abaixar cabo de vassoura',
-                    descricao: "Para realizar o exercicio você ira necessitar de um cabo de vassoura",
-                    idVideo: 'iee2TATGMyI'
-                },
-                {
-                    id: 3,
-                    titulo: 'Exercicio levantar e abaixar cabo de vassoura',
-                    descricao: "Para realizar o exercicio você ira necessitar de um cabo de vassoura",
-                    idVideo: 'k8hz8WIxhAA'
-                },
-                {
-                    id: 4,
-                    titulo: 'Exercicio levantar e abaixar cabo de vassoura',
-                    descricao: "Para realizar o exercicio você ira necessitar de um cabo de vassoura",
-                    idVideo: 'iee2TATGMyI'
-                },
-                {
-                    id: 5,
-                    titulo: 'Exercicio levantar e abaixar cabo de vassoura',
-                    descricao: "Para realizar o exercicio você ira necessitar de um cabo de vassoura",
-                    idVideo: 'k8hz8WIxhAA'
-                },
-                {
-                    id: 6,
-                    titulo: 'Exercicio levantar e abaixar cabo de vassoura',
-                    descricao: "Para realizar o exercicio você ira necessitar de um cabo de vassoura",
-                    idVideo: 'k8hz8WIxhAA'
-                },
-                {
-                    id: 7,
-                    titulo: 'Exercicio levantar e abaixar cabo de vassoura',
-                    descricao: "Para realizar o exercicio você ira necessitar de um cabo de vassoura",
-                    idVideo: 'k8hz8WIxhAA'
-                },
-                {
-                    id: 8,
-                    titulo: 'Exercicio levantar e abaixar cabo de vassoura',
-                    descricao: "Para realizar o exercicio você ira necessitar de um cabo de vassoura",
-                    idVideo: 'k8hz8WIxhAA'
-                },
-                {
-                    id: 9,
-                    titulo: 'Exercicio levantar e abaixar cabo de vassoura',
-                    descricao: "Para realizar o extesteeeea",
-                    idVideo: 'k8hz8WIxhAA'
+            const preExercicioRef = collection(FIRESTORE_DB, 'exercicio');
+            const subscriber = onSnapshot(preExercicioRef, {
+                next: (snapshot) => {
+                    const preExercicio: any[] = [];
+                    snapshot.docs.forEach((doc) => {
+                        preExercicio.push({
+                            id: doc.id,
+                            ...doc.data()
+                        })
+                    });
+                    setlistaPreExercicio(preExercicio)
                 }
-            ]
-
-            setlistaExercicio(teste);
+            });
+            return () => subscriber();
         } catch (error) {
-
+            alert(error.message);
         }
-        setLoading(false);
     };
 
     return (
@@ -107,21 +49,22 @@ const PreExercicio = (props) => {
                         <Button style={styles.buttom}
                             mode="contained"
                             icon="run"
-                            onPress={() => { navigation.navigate("Exercicio", { idVideo1: listaExercicio[0]?.idVideo, idVideo2:  listaExercicio[1]?.idVideo, idVideo03:  listaExercicio[2]?.idVideo }) }}>
+                            onPress={() => { navigation.navigate("Exercicio", { idVideo1: listaPreExercicio[0]?.idVideo, idVideo2: listaPreExercicio[1]?.idVideo, idVideo03: listaPreExercicio[2]?.idVideo }) }}>
                             <Text>Exercicio</Text>
                         </Button>
                     </View>
                     <View style={styles.container}>
-                    {loading && <ActivityIndicator style={styles.loadingContainer}  />}
-                    {!loading &&  <FlatList
-                            data={listaExercicio}
+                        <FlatList
+                            data={listaPreExercicio}
                             renderItem={({ item }) => {
                                 return (<List.Item titleStyle={styles.title}
                                     descriptionStyle={styles.description}
-                                    title={item.titulo} description={item.descricao}
+                                    key={item.id}
+                                    title={item.tituloExercicio} 
+                                    description={item.descricaoExercicio}
                                     titleNumberOfLines={3} />)
                             }}
-                        />}
+                        />
                     </View>
                 </View>
             </SafeAreaView>

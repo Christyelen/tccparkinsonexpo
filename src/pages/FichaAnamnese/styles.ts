@@ -16,9 +16,9 @@ export const styles = StyleSheet.create({
     },
     containerBotoes: {
         flexDirection: "row",
-        justifyContent:"space-between",
+        justifyContent: "space-between",
         marginLeft: 20,
-        marginRight:20
+        marginRight: 20
     },
     textGroup: {
         fontSize: 20,
@@ -29,7 +29,10 @@ export const styles = StyleSheet.create({
     buttom: {
         marginTop: 8
     },
-    appBar:{
+    appBar: {
         backgroundColor: '#f0dbff',
     },
+    readOnly: {
+        backgroundColor: '#F2F2F2'
+    }
 });

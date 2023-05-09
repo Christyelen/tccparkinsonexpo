@@ -4,12 +4,18 @@ import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
 import { Button, TextInput } from "react-native-paper";
+import { addDoc, collection } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../../firebaseConfig";
 
 const CadastroNives = () => {
     const navigation = useNavigation<propsStack>()
+    const [tituloNivel, setTituloNivel] = useState('')
+    const [nivel, setNivel] = useState('')
 
-    const salvarCampos = () => {
-        console.log("salvou")
+    const addNivel = async () => {
+        const doc = await addDoc(collection(FIRESTORE_DB, 'nivel'), { titulo: tituloNivel, nivel: nivel });
+        console.log('Passou')
+        setNivel('');
     }
 
     return (
@@ -22,11 +28,9 @@ const CadastroNives = () => {
                             Voltar
                         </Button>
                         <Button icon="content-save-outline" mode="contained" style={styles.buttom}
-                            onPress={salvarCampos}>
+                            onPress={addNivel}>
                             Salvar
                         </Button>
-
-                     
                     </View>
 
                     <View style={styles.container}>
@@ -34,6 +38,15 @@ const CadastroNives = () => {
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Titulo do Nível"
+                            onChangeText={(text: string) => setTituloNivel(text)}
+                            value={tituloNivel}
+                        />
+
+                        <TextInput style={styles.campostexto}
+                            mode="outlined"
+                            label="Nível"
+                            onChangeText={(text: string) => setNivel(text)}
+                            value={nivel}
                         />
                     </View>
 
