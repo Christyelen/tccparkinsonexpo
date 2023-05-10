@@ -6,12 +6,15 @@ import { propsStack } from "../../routes/Stack/Models";
 import { SCREEN_SPACE, VIDEO_HEIGHT, styles } from "./styles";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Button, Text, ActivityIndicator } from "react-native-paper";
+import { addDoc, collection } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../../firebaseConfig";
+
 
 
 const Exercicio = (props) => {
-    
+
     const navigation = useNavigation<propsStack>();
-   
+
     const { width } = useWindowDimensions();
     const VIDEO_WIDTH = width - (SCREEN_SPACE * 2);
 
@@ -20,11 +23,13 @@ const Exercicio = (props) => {
     const [isCounting, setIsCounting] = useState(false);
     const [currentVideo, setCurrentVideo] = useState(1);
     const [fimExercicios, setfimExercicios] = useState(false);
+    const [ofensiva, setOfensiva] = useState('');
+    const [dataExercicio, setDataExercicio] = useState('');
 
     let duracao;
 
     const inicioExercicio = () => {
-       // setDataInicial(new Date());
+        // setDataInicial(new Date());
     };
 
     const ProximoExercicio = () => {
@@ -39,7 +44,18 @@ const Exercicio = (props) => {
         setIsCounting(false);
         setfimExercicios(true);
         setPlaying(false);
+        setDataExercicio('05/08/2023') //não setou a data mas passou corretamente no processo
+        addOfensiva();
     }
+
+    const addOfensiva = async () => {
+        const doc = await addDoc(collection(FIRESTORE_DB, 'ofensiva'), {
+            dataExercicioRealizado: dataExercicio,
+        });
+        setOfensiva('');
+        console.log('Passou salvar ofensiva')
+    }
+
 
     const handleVideoEnd = () => {
         setCurrentVideo((currentVideo + 1) != 4 ? currentVideo + 1 : 4);
