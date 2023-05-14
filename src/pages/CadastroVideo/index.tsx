@@ -14,9 +14,10 @@ const CadastroVideo = () => {
     const [tituloExercicio, setTituloExercicio] = useState('')
     const [descricaoExercicio, setDescricaoExercicio] = useState('')
     const [idVideo, setIdVideo] = useState('')
+    const [nivel, setNivel] = useState('')
 
     const addExercicio = () => {
-        const doc = addDoc(collection(FIRESTORE_DB, 'exercicio'), {idVideo: idVideo, tituloExercicio: tituloExercicio, descricaoExercicio: descricaoExercicio });
+        const doc = addDoc(collection(FIRESTORE_DB, 'exercicio'), {idVideo: idVideo, tituloExercicio: tituloExercicio, descricaoExercicio: descricaoExercicio, nivel: nivel });
         console.log('Passou')
         setExercicio('');
     }
@@ -61,6 +62,12 @@ const CadastroVideo = () => {
                             numberOfLines={4}
                             onChangeText={(text: string) => setDescricaoExercicio(text)}
                             value={descricaoExercicio}
+                        />
+                         <TextInput style={styles.campostexto}
+                            mode="outlined"
+                            label="Nivel"
+                            onChangeText={(text: string) => setNivel(text)}
+                            value={nivel}
                         />
 
                         <View>

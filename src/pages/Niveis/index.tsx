@@ -10,10 +10,37 @@ import { FIRESTORE_DB } from "../../../firebaseConfig";
 const Niveis = () => {
     const navigation = useNavigation<propsStack>()
     const [listaNiveis, setlistaNiveis] = useState([]);
+    const [listaPreExercicio, setlistaPreExercicio] = useState([]);
+
 
     useEffect(() => {
         buscarNiveis();
+        buscarPreExercicio();
     }, []);
+
+    const buscarPreExercicio = () => {
+        try {
+            const preExercicioRef = collection(FIRESTORE_DB, 'exercicio');
+            const subscriber = onSnapshot(preExercicioRef, {
+                next: (snapshot) => {
+                    const preExercicio: any[] = [];
+                    snapshot.docs.forEach((doc) => {
+                        preExercicio.push({
+                            id: doc.id,
+                            ...doc.data()
+                        })
+                    });
+                    setlistaPreExercicio(preExercicio)
+                }
+            });
+
+            return () => subscriber();
+
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
 
     const buscarNiveis = async () => {
         try {
@@ -27,7 +54,7 @@ const Niveis = () => {
                             ...doc.data()
                         })
                     });
-                    setlistaNiveis(niveis)
+                    setlistaNiveis(niveis);
                 }
             });
             return () => subscriber();
@@ -49,13 +76,14 @@ const Niveis = () => {
 
                     <View style={styles.containerBotoes}>
                         <View style={styles.container}>
-                        {listaNiveis.map(niveis => (
-                            <Button
-                                style={styles.buttom}
-                                onPress={() => navigation.navigate("PreExercicio", { nivel: niveis.nivel })}
-                                mode="contained">
-                                <Text>{niveis.titulo}</Text>
-                            </Button>))}
+                            {listaNiveis.map(niveis => (
+                                <Button
+                                    key={niveis.key}
+                                    style={styles.buttom}
+                                    onPress={() => navigation.navigate("PreExercicio", { nivel: niveis.nivel, listaOfensiva: listaPreExercicio})}
+                                    mode="contained">
+                                    <Text>{niveis.titulo}</Text>
+                                </Button>))}
                         </View>
                     </View>
                 </ScrollView>

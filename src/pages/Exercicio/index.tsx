@@ -1,81 +1,123 @@
-import React, { useState, useCallback } from "react";
-import { View, useWindowDimensions, SafeAreaView, ScrollView } from "react-native";
-import YoutubePlayer, { PLAYER_STATES } from "react-native-youtube-iframe";
+import React, { useState, useCallback, useEffect } from "react";
+import { SafeAreaView, ScrollView, View, useWindowDimensions } from "react-native";
+import { ActivityIndicator, Button, Text } from "react-native-paper";
+import { SCREEN_SPACE, VIDEO_HEIGHT, styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
-import { SCREEN_SPACE, VIDEO_HEIGHT, styles } from "./styles";
+import YoutubePlayer, { PLAYER_STATES } from "react-native-youtube-iframe";
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { addDoc, collection } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
-
-
+import moment from 'moment';
 
 const Exercicio = (props) => {
 
-    const navigation = useNavigation<propsStack>();
-
     const { width } = useWindowDimensions();
     const VIDEO_WIDTH = width - (SCREEN_SPACE * 2);
+    const navigation = useNavigation<propsStack>();
 
-    const [playing, setPlaying] = useState(false);
     const [videoReady, setVideoReady] = useState(false);
-    const [isCounting, setIsCounting] = useState(false);
-    const [currentVideo, setCurrentVideo] = useState(1);
-    const [fimExercicios, setfimExercicios] = useState(false);
-    const [ofensiva, setOfensiva] = useState('');
-    const [dataExercicio, setDataExercicio] = useState('');
+    const [videoAtual, setVideoAtual] = useState(1);
+    const [idVideo, setIdVideo] = useState(''); //fazer o metodo p trocar o id do video e nao ficar renderizando novos youtube players
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [contemErro, setContemErro] = useState(false);
+    const [iniciouExercicio, setIniciouExercicio] = useState(false);
+    const [fimExercicio, setFimExercicio] = useState(false);
+    const [dataHoraInicial, setDataHoraInicial] = useState(new Date);
 
-    let duracao;
+    useEffect(() => {
+        definirVideo();
+        validarCadastro();
+    }, []);
 
-    const inicioExercicio = () => {
-        // setDataInicial(new Date());
-    };
-
-    const ProximoExercicio = () => {
-        setPlaying(false);
-        setVideoReady(false);
-        setIsCounting(false);
-        handleVideoEnd();
+    const addOfensiva = () => {
+        const dataExercicioRealizado = moment();
+        addDoc(collection(FIRESTORE_DB, 'ofensiva'), { dataExercicioRealizado: dataExercicioRealizado.format('DD/MM/YYYY') });
+        console.log('Passou valor Ofensiva')
     }
 
-    const fimExercicio = () => {
-        setVideoReady(false);
-        setIsCounting(false);
-        setfimExercicios(true);
-        setPlaying(false);
-        setDataExercicio('05/08/2023') //não setou a data mas passou corretamente no processo
+    const realizarContagemTempo = () => {
+        //regra p contabilizar o tempo do exercicio\
+    }
+
+    const validarCadastro = () => {
+        if (props.route.params.idVideo1 == null ||
+            props.route.params.idVideo2 == null ||
+            props.route.params.idVideo03 == null){
+                setContemErro(true);
+            }
+    }
+
+    const definirVideo = () => {
+        console.log("Definir video: " + videoAtual)
+        switch (videoAtual) {
+            case 1:
+                if (props.route.params.idVideo1 != null) {
+                    setIdVideo(props.route.params.idVideo1);
+                    setVideoAtual(videoAtual + 1);
+
+                }
+                else {
+                    console.log('nao tem');
+                    setIdVideo('');
+                }
+                break;
+            case 2:
+                if (props.route.params.idVideo2 != null) {
+                    setIdVideo(props.route.params.idVideo2);
+                    setVideoAtual(videoAtual + 1);
+
+                }
+                else {
+                    setIdVideo('');
+                    console.log('nao tem');
+                }
+                break;
+            case 3:
+                if (props.route.params.idVideo03 != null) {
+                    setIdVideo(props.route.params.idVideo03);
+                    setVideoAtual(videoAtual + 1);
+                }
+                else {
+                    setIdVideo('');
+                    console.log('nao tem');
+                }
+                break;
+            default:
+                break;
+        }
+        console.log("Soma do video: " + videoAtual)
+        console.log("id video: " + idVideo)
+    }
+
+    const proximoExercicio = () => {
+        console.log("proximo exercicio");
+        setIdVideo('');
+        setTimeout(() => {
+            definirVideo();
+        }, 500);
+    }
+
+    const finalizarExercicio = () => {
+        console.log("fim exercicio");
+        setIsPlaying(false);
+        setFimExercicio(true);
+        realizarContagemTempo();
         addOfensiva();
     }
-
-    const addOfensiva = async () => {
-        const doc = await addDoc(collection(FIRESTORE_DB, 'ofensiva'), {
-            dataExercicioRealizado: dataExercicio,
-        });
-        setOfensiva('');
-        console.log('Passou salvar ofensiva')
-    }
-
-
-    const handleVideoEnd = () => {
-        setCurrentVideo((currentVideo + 1) != 4 ? currentVideo + 1 : 4);
-    };
 
     const onChangeState = useCallback((state) => {
         if (state === PLAYER_STATES.ENDED) {
             //video deveria ficar em looping mas so passa 2x
-            togglePlaying();
         }
         else if (state === PLAYER_STATES.PLAYING) {
-            if (!isCounting) {
-                inicioExercicio();
-                setIsCounting(true);
-            }
+            setDataHoraInicial(new Date);
+            setIniciouExercicio(true);
+            console.log("Passou no playing")
         }
-    }, []);
-
-    const togglePlaying = useCallback(() => {
-        setPlaying(true);
+        else if (state === PLAYER_STATES.PAUSED) {
+            console.log("Passou no pause")
+        }
     }, []);
 
     const onFullScreenChange = useCallback((isfullscreen: boolean) => {
@@ -100,52 +142,33 @@ const Exercicio = (props) => {
                         </Button>
                     </View>
                     <View style={styles.container}>
-                        <View style={styles.player}>
-                            {currentVideo == 1 && <YoutubePlayer
+                        {!fimExercicio && !contemErro && <View style={styles.player}>
+                            <YoutubePlayer
                                 height={videoReady ? VIDEO_HEIGHT + 20 : 0}
                                 width={VIDEO_WIDTH}
-                                play={playing}
-                                videoId={props.route.params.idVideo1}
+                                play={isPlaying}
+                                videoId={idVideo}
                                 onChangeState={onChangeState}
                                 onReady={() => setVideoReady(true)}
                                 onFullScreenChange={onFullScreenChange}
-                            />}
-                        </View>
-                        <View style={styles.player}>
-                            {currentVideo == 2 && <YoutubePlayer
-                                height={videoReady ? VIDEO_HEIGHT + 20 : 0}
-                                width={VIDEO_WIDTH}
-                                play={playing}
-                                videoId={props.route.params.idVideo2}
-                                onChangeState={onChangeState}
-                                onReady={() => setVideoReady(true)}
-                                onFullScreenChange={onFullScreenChange}
-                            />}
-                        </View>
-                        <View style={styles.player}>
-                            {currentVideo == 3 && <YoutubePlayer
-                                height={videoReady ? VIDEO_HEIGHT + 20 : 0}
-                                width={VIDEO_WIDTH}
-                                play={playing}
-                                videoId={props.route.params.idVideo03}
-                                onChangeState={onChangeState}
-                                onReady={() => setVideoReady(true)}
-                                onFullScreenChange={onFullScreenChange}
-                            />}
-                        </View>
+                            />
+                        </View>}
                         <View>
-                            {!videoReady && !fimExercicios && <ActivityIndicator style={styles.loadingContainer} />}
-                            <Text>
-                                {'Tempo para realizar o exercicio:' + duracao}
-                            </Text>
-                            {isCounting && currentVideo != 3 &&
-                                <Button onPress={ProximoExercicio} style={styles.buttom} mode="contained" icon="arrow-right-circle-outline">
+                        {contemErro && <Text>Alerta: Exercicio não cadastrado corretamente. contate o administrador do sistema</Text>}
+                            {!videoReady && !fimExercicio && !contemErro && <ActivityIndicator style={styles.loadingContainer} />}
+                            {!fimExercicio && videoAtual <= 3 && !contemErro &&
+                                <Button onPress={proximoExercicio} style={styles.buttom} mode="contained" icon="arrow-right-circle-outline">
                                     Próximo exercicio
                                 </Button>}
-                            {isCounting && currentVideo == 3 &&
-                                <Button onPress={fimExercicio} style={styles.buttom} mode="contained" icon="check">
+                            {!fimExercicio && videoAtual > 3 && !contemErro &&
+                                <Button onPress={finalizarExercicio} style={styles.buttom} mode="contained" icon="check">
                                     Finalizar exercicios
                                 </Button>}
+
+                            {fimExercicio && !contemErro &&
+                                <Text>
+                                    Você finalizou seus exercicios diários! Parabéns! Veja sua evolução na página de ofensiva diária.
+                                </Text>}
                         </View>
                     </View>
                 </ScrollView>
@@ -154,4 +177,4 @@ const Exercicio = (props) => {
     );
 }
 
-export default Exercicio
+export default Exercicio;

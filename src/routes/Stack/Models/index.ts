@@ -3,7 +3,7 @@ import{ NativeStackNavigationProp} from "@react-navigation/native-stack"
 export type propsNavigationStack = {
     Home: undefined
     FichaAnamnese:{
-        name: string
+        fichaAnamnese: object
     }
     Exercicio: {
         idVideo1: string,
@@ -13,6 +13,7 @@ export type propsNavigationStack = {
     Blog: undefined
     PreExercicio: {
         nivel: string,
+        listaOfensiva: object
     }
     Ofensiva: undefined
     Niveis: undefined

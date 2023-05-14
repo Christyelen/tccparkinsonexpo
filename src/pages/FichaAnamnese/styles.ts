@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
     },
     scroll: {
         flex: 1,
+        width: '100%'
     },
     campostexto: {
         width: '100%',

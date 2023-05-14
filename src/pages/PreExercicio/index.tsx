@@ -9,32 +9,37 @@ import { FIRESTORE_DB } from "../../../firebaseConfig";
 
 const PreExercicio = (props) => {
     const navigation = useNavigation<propsStack>();
-    const [listaPreExercicio, setlistaPreExercicio] = useState([]);
+    const [listaPreExercicioFiltrada, setlistaPreExercicioFiltrada] = useState([]);
+    const [listaReady, setListaReady] = useState(false);
+    const [videos, setVideos] = useState([]);
 
     useEffect(() => {
-        buscarPreExercicio(props.route.params.nivel);
+        filtrarExercicios(props.route.params.nivel, props.route.params.listaOfensiva);
+        definirVideosNivel();
     }, []);
-
-    const buscarPreExercicio = (nivel) => {
-        try {
-            const preExercicioRef = collection(FIRESTORE_DB, 'exercicio');
-            const subscriber = onSnapshot(preExercicioRef, {
-                next: (snapshot) => {
-                    const preExercicio: any[] = [];
-                    snapshot.docs.forEach((doc) => {
-                        preExercicio.push({
-                            id: doc.id,
-                            ...doc.data()
-                        })
-                    });
-                    setlistaPreExercicio(preExercicio)
-                }
-            });
-            return () => subscriber();
-        } catch (error) {
-            alert(error.message);
+    
+    const definirVideosNivel = () =>{
+        for (let index = 0; index < listaPreExercicioFiltrada.length; index++) {
+            const preExercicio = listaPreExercicioFiltrada[index];
+            videos.push(preExercicio.idVideo);
         }
-    };
+        setVideos(videos);
+        console.log(videos);
+        console.log(videos[0]);
+    }
+
+    const filtrarExercicios = (nivel, listaPreExercicio) => {
+
+        for (let i = 0; i < listaPreExercicio.length; i++) {
+            if (listaPreExercicio[i].nivel == nivel) {
+                listaPreExercicioFiltrada.push(listaPreExercicio[i]);
+            }
+        }
+        console.log(listaPreExercicioFiltrada);
+        setlistaPreExercicioFiltrada(listaPreExercicioFiltrada);
+        setListaReady(true);
+    }
+
 
     return (
         <>
@@ -49,22 +54,23 @@ const PreExercicio = (props) => {
                         <Button style={styles.buttom}
                             mode="contained"
                             icon="run"
-                            onPress={() => { navigation.navigate("Exercicio", { idVideo1: listaPreExercicio[0]?.idVideo, idVideo2: listaPreExercicio[1]?.idVideo, idVideo03: listaPreExercicio[2]?.idVideo }) }}>
+                            onPress={() => { navigation.navigate("Exercicio", { idVideo1: videos[0] ? videos[0]: null, idVideo2: videos[1] ? videos[1]: null, idVideo03: videos[2] ? videos[2]: null }) }}>
                             <Text>Exercicio</Text>
                         </Button>
                     </View>
                     <View style={styles.container}>
-                        <FlatList
-                            data={listaPreExercicio}
-                            renderItem={({ item }) => {
-                                return (<List.Item titleStyle={styles.title}
-                                    descriptionStyle={styles.description}
-                                    key={item.id}
-                                    title={item.tituloExercicio} 
-                                    description={item.descricaoExercicio}
-                                    titleNumberOfLines={3} />)
-                            }}
-                        />
+                    {!listaReady && <ActivityIndicator style={styles.loadingContainer} />}
+                            <FlatList
+                                data={listaPreExercicioFiltrada}
+                                renderItem={({ item }) => {
+                                    return (<List.Item titleStyle={styles.title}
+                                        descriptionStyle={styles.description}
+                                        key={item.id}
+                                        title={item.tituloExercicio}
+                                        description={item.descricaoExercicio}
+                                        titleNumberOfLines={3} />)
+                                }}
+                            />
                     </View>
                 </View>
             </SafeAreaView>
