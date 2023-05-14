@@ -47,9 +47,12 @@ export const styles = StyleSheet.create({
         borderRadius: 5
     },
     containerImage: {
-        justifyContent:"center",
-        alignSelf:"center",
+        justifyContent: "center",
+        alignSelf: "center",
         width: '100%',
         marginTop: 8
+    },
+    containerTabela: {
+        padding: 20
     }
 })

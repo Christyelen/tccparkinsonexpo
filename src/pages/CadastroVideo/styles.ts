@@ -50,5 +50,8 @@ export const styles = StyleSheet.create({
     },
     listagem:{
         width:'100%'
+    },
+    containerTabela: {
+        padding: 20
     }
 })

@@ -38,4 +38,7 @@ export const styles = StyleSheet.create({
         width: '100%',
         marginTop: 5,
     },
+    containerTabela: {
+        padding: 20
+    }
 })
