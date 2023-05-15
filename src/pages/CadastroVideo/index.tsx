@@ -24,12 +24,33 @@ const CadastroVideo = () => {
     const [errorDescricao, setErrorDescricao] = useState('')
     const [errorNivel, setErrorNivel] = useState('')
     const [possuiErro, setPossuiErro] = useState(false);
-
-
+    const [listaNiveis, setListaNiveis] = useState([]);
 
     useEffect(() => {
         buscarExercicio();
+        buscarNiveis();
     }, []);
+
+    const buscarNiveis = async () => {
+        try {
+            const niveisRef = collection(FIRESTORE_DB, 'nivel');
+            const subscriber = onSnapshot(niveisRef, {
+                next: (snapshot) => {
+                    const niveis: any[] = [];
+                    snapshot.docs.forEach((doc) => {
+                        niveis.push({
+                            id: doc.id,
+                            ...doc.data()
+                        })
+                    });
+                    setListaNiveis(niveis)
+                }
+            });
+            return () => subscriber();
+        } catch (error) {
+            alert(error.message);
+        }
+    };
 
 
     const validarCampos = () => {
@@ -48,6 +69,23 @@ const CadastroVideo = () => {
         }
         if (nivel == '') {
             setErrorNivel("Campo Nivel é obrigatório!");
+            erros += 1;
+        }
+        listaNiveis.map((item) => {
+            if (item.nivel == nivel) {
+                setErrorNivel("Não é possivel adicionar um nivel com mesmo valor.");
+                erros += 1;
+            }
+        })
+
+        let quantidadeVideosNivel = 0;
+        listaExercicio.map((item) => {
+            if (item.nivel == nivel) {
+                quantidadeVideosNivel = quantidadeVideosNivel + 1;
+            }
+        });
+        if (quantidadeVideosNivel == 3) {
+            setErrorNivel("Esse nivel já possui a quantidade máxima de videos permitida.");
             erros += 1;
         }
 

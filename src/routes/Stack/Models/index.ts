@@ -15,7 +15,9 @@ export type propsNavigationStack = {
         nivel: string,
         listaOfensiva: object
     }
-    Ofensiva: undefined
+    Ofensiva:{
+        ofensiva: object
+    }
     Niveis: undefined
     Login: undefined
     CadastroAdm: undefined

@@ -1,115 +1,74 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, Share } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, Share } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
-import { Appbar, Button } from "react-native-paper";
+import { Button } from "react-native-paper";
 import ViewShot from 'react-native-view-shot';
-import { addDoc, collection, doc, getFirestore, onSnapshot, updateDoc } from "firebase/firestore";
-import { FIRESTORE_DB } from "../../../firebaseConfig";
 import moment from "moment";
+import { Calendar } from "react-native-calendars";
 
-const Ofensiva = () => {
+const Ofensiva = (props) => {
     const navigation = useNavigation<propsStack>()
     const viewShotRef = useRef(null);
     const [listaOfensivas, setlistaOfensivas] = useState([]);
-    const [listaDiasConsecutivos , setlistaDiasConsecutivos] = useState([]);
+    const [listaOfensivasData, setlistaOfensivasData] = useState([]);
     const [diasOfensiva, setDiasOfensiva] = useState(0);
-    const [contadorDias, setContadorDias] = useState(0);
-    const [idContadorDias, setIDContadorDias] = useState(0);
 
     useEffect(() => {
-        buscarOfensivas();
-        buscarDiasConsecutivos();
-        calcularDiasDeOfensiva();
+        setlistaOfensivas(props.route.params.ofensiva)
+        ordenarListagemDatas(props.route.params.ofensiva)
     }, []);
 
-    const buscarOfensivas = async () => {
-        try {
-            const ofensivasRef = collection(FIRESTORE_DB, 'ofensiva');
-            const subscriber = onSnapshot(ofensivasRef, {
-                next: (snapshot) => {
-                    const ofensivas: any[] = [];
-                    snapshot.docs.forEach((doc) => {
-                        ofensivas.push({
-                            id: doc.id,
-                            ...doc.data()
-                        })
-                    });
-                    setlistaOfensivas(ofensivas)
-                }
-            });
-            return () => subscriber();
-        } catch (error) {
-            alert(error.message);
-        }
-    };
-
-    const buscarDiasConsecutivos = async () => {
-        try {
-            const diasConsecutivosRef = collection(FIRESTORE_DB, 'diasConsecutivos');
-            const subscriber = onSnapshot(diasConsecutivosRef, {
-                next: (snapshot) => {
-                    const diasConsecutivos: any[] = [];
-                    snapshot.docs.forEach((doc) => {
-                        diasConsecutivos.push({
-                            id: doc.id,
-                            ...doc.data()
-                        })
-                    });
-                    setlistaDiasConsecutivos(diasConsecutivos);
-                    console.log("dias consecutivos" + listaDiasConsecutivos);
-                }
-            });
-            
-            return () => subscriber();
-        } catch (error) {
-            alert(error.message);
-        }
-    };
-
-    const calcularDiasDeOfensiva = () => {
-
-        let contadorDiasConsecutivos = 0;
-        let ultimoDocumentoData = null;
-        
-        listaOfensivas.forEach((ofensiva) => {
-            listaDiasConsecutivos.forEach(diasConsecutivos => {
-                setIDContadorDias(diasConsecutivos.id);
-            });
-
-          const dataOfensiva = ofensiva.dataExercicioRealizado;
-        
-          if (ultimoDocumentoData && dataOfensiva.diff(ultimoDocumentoData, 'days') === 1) {
-            // Documento atual é consecutivo ao último documento
-            addDiasConsecutivos(idContadorDias);
-          } else {
-            // Documento atual não é consecutivo, reinicie o contador
-            addDiasConsecutivos(idContadorDias);
-            contadorDiasConsecutivos = 1;
-          }
-        
-          ultimoDocumentoData = dataOfensiva;
+    const ordenarListagemDatas = async (listaOfensivasParametro) => {
+        listaOfensivasParametro.forEach(item => {
+            if (item.idPessoa == '') // colocar o idPessoa
+                listaOfensivasData.push(item.dataExercicioRealizado)
         });
 
-        console.log("teste" + contadorDias);
-        setDiasOfensiva(contadorDias);
+        listaOfensivasData.sort((a, b) => {
+            const dateA = new Date(a);
+            const dateB = new Date(b);
+
+            if (dateA < dateB) {
+                return 1;
+            }
+
+            if (dateA > dateB) {
+                return -1;
+            }
+
+            return 0;
+        });
+
+        console.log("Lista ordenada: " + listaOfensivasData);
+        calcularDiasDeOfensiva(listaOfensivasParametro)
+        setlistaOfensivasData(listaOfensivasData)
     }
 
-    const addDiasConsecutivos = async (id) => {
-        if(id != ""){
-            const docRef = await doc(FIRESTORE_DB, 'diasConsecutivos', id)
-            console.log(docRef);
-            updateDoc(docRef, {
-                diasConsecutivos: +1
-            });
-            console.log('Passou valor dias consecutivos')
-        }
-        else{
-            addDoc(collection(FIRESTORE_DB, 'diasConsecutivos'), {diasConsecutivos: 1});
-        }
-    }
+    const calcularDiasDeOfensiva = async (listaOfensivasParametro) => {
 
+        let contadorDiasConsecutivos = 0;
+        let ultimoDocumentoData = moment(moment().format('YYYY-MM-DD'), 'YYYY-MM-DD');
+
+        //  console.log("lista ofensiva inicio" + JSON.stringify(listaOfensivasParametro, null, 2));
+
+        listaOfensivasParametro.forEach((ofensiva) => {
+            if (ofensiva.idPessoa == true) { //colocar o idPessoa no lugar do true
+                const dataOfensiva = moment(ofensiva.dataExercicioRealizado, 'YYYY-MM-DD');
+                if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 1) {
+                    contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
+                    ultimoDocumentoData = dataOfensiva;
+                }
+                // else if(ultimoDocumentoData.diff(dataOfensiva, 'days') === 0){
+                //     contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
+                //     ultimoDocumentoData = //ver como colocar a proxima data
+                // }
+            }
+        });
+
+        setDiasOfensiva(contadorDiasConsecutivos);
+    }
 
     const handleShare = async () => {
 
@@ -135,6 +94,15 @@ const Ofensiva = () => {
         }
     };
 
+    let markedDay = {};
+    listaOfensivas.map((item) => {
+        markedDay[item.dataExercicioRealizado] = {
+            selected: true,
+            marked: true,
+            selectedColor: "purple",
+        };
+    });
+
     return (
         <>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
@@ -148,13 +116,17 @@ const Ofensiva = () => {
                             icon={'share-variant'} >Compartilhar
                         </Button>
                     </View>
-                    <ViewShot ref={viewShotRef} style={{ flex: 1 }}>
+                    <ViewShot ref={viewShotRef} style={{ flex: 1, backgroundColor: '#f9f3fe' }}>
                         <View style={styles.container}>
+                            <Calendar style={{ borderRadius: 10, elevation: 4, margin: 40 }} onDayPress={date => {
+                                console.log(date);
+                            }}
+                                initialDate={moment().format('YYYY-MM-DD')}
+                                minDate={'2020-01-01'}
+                                hideExtraDays={true}
+                                markedDates={markedDay}
+                            />
                             <Text style={styles.textGroup}>Você está com uma ofensiva de: {diasOfensiva} dias</Text>
-                            {listaOfensivas.map(ofensiva => (
-                                <Text key={ofensiva.key} style={{ margin: 10 }}>ofensiva: {ofensiva.dataExercicioRealizado}</Text>
-                            ))}
-                            <Text style={{ margin: 10 }}>~Colocar calendáriozinho com os dias que ja foram marcados e um icone de foguinho~</Text>
                         </View>
                     </ViewShot>
                 </ScrollView>
@@ -164,3 +136,4 @@ const Ofensiva = () => {
 };
 
 export default Ofensiva
+

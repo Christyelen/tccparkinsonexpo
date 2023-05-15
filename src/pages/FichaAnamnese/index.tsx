@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native"
 import { propsStack } from "../../routes/Stack/Models";
 import { TextInput, Button, Checkbox, HelperText } from 'react-native-paper';
 import { styles } from "./styles";
-import { addDoc, collection, doc, getFirestore, onSnapshot, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getFirestore, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
 
 
@@ -179,7 +179,11 @@ const FichaAnamnese = (props) => {
 
     const buscarIdFicha = (fichaAnamnese) => {
         if (fichaAnamnese != null) {
-            setIdDocumento(fichaAnamnese[0].id);
+            fichaAnamnese.map((item, index) => {
+                if (item.idPessoa == '123') { // colocar o IDPessoa 
+                    setIdDocumento(fichaAnamnese[index].id);
+                }
+            });
         }
     }
 
@@ -249,9 +253,9 @@ const FichaAnamnese = (props) => {
             }
         }
         console.log(possuiErro)
-        if(possuiErro){
+        if (possuiErro) {
             setReadOnly(false);
-        }else{
+        } else {
             setarCamposReadOnly();
         }
     }

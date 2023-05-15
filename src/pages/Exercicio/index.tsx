@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { SafeAreaView, ScrollView, View, useWindowDimensions } from "react-native";
-import { ActivityIndicator, Button, Text } from "react-native-paper";
+import { Alert, SafeAreaView, ScrollView, View, useWindowDimensions } from "react-native";
+import { ActivityIndicator, Button, Dialog, Portal, Provider, Text } from "react-native-paper";
 import { SCREEN_SPACE, VIDEO_HEIGHT, styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import YoutubePlayer, { PLAYER_STATES } from "react-native-youtube-iframe";
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query, where } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
 import moment from 'moment';
 
@@ -21,35 +21,105 @@ const Exercicio = (props) => {
     const [idVideo, setIdVideo] = useState(''); //fazer o metodo p trocar o id do video e nao ficar renderizando novos youtube players
     const [isPlaying, setIsPlaying] = useState(false);
     const [contemErro, setContemErro] = useState(false);
-    const [iniciouExercicio, setIniciouExercicio] = useState(false);
     const [fimExercicio, setFimExercicio] = useState(false);
-    const [dataHoraInicial, setDataHoraInicial] = useState(new Date);
+    const [dataHoraInicial, setDataHoraInicial] = useState('');
+    let duracaoExercicio = '';
+    const [listaOfensivas, setlistaOfensivas] = useState([]);
 
     useEffect(() => {
         definirVideo();
         validarCadastro();
+        buscarOfensivas();
+        iniciarExercicioAlerta();
     }, []);
+
+    const buscarOfensivas = async () => {
+        try {
+            const ofensivasRef = collection(FIRESTORE_DB, 'ofensiva');
+            const q = query(ofensivasRef, where('idPessoa', '==', '')); //colocar o IdPessoa
+            const subscriber = onSnapshot(ofensivasRef, {
+                next: (snapshot) => {
+                    const ofensivas: any[] = [];
+                    snapshot.docs.forEach((doc) => {
+                        ofensivas.push({
+                            id: doc.id,
+                            ...doc.data()
+                        })
+                    });
+                    setlistaOfensivas(ofensivas)
+
+                }
+            });
+            return () => subscriber();
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const iniciarExercicioAlerta = () => {
+        if (!videoReady) {
+            Alert.alert(
+                'Título do Alerta',
+                'Mensagem de confirmação',
+                [
+                    {
+                        text: 'Cancelar',
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Confirmar',
+                        onPress: () => {
+                            setDataHoraInicial(moment().toString());
+                            console.log("data inicial: " + moment().toString());
+                        },
+                    },
+                ],
+            );
+        }
+    }
 
     const addOfensiva = () => {
         const dataExercicioRealizado = moment();
-        addDoc(collection(FIRESTORE_DB, 'ofensiva'), { dataExercicioRealizado: dataExercicioRealizado.format('DD/MM/YYYY') });
+        addDoc(collection(FIRESTORE_DB, 'ofensiva'), { dataExercicioRealizado: dataExercicioRealizado.format('YYYY-MM-DD'), dataOrdenacao: dataExercicioRealizado.toDate(), tempoDuracaoExercicio: duracaoExercicio });
         console.log('Passou valor Ofensiva')
+        buscarOfensivas();
     }
 
     const realizarContagemTempo = () => {
-        //regra p contabilizar o tempo do exercicio\
+
+        let horaInicial = moment(dataHoraInicial, 'ddd MMM DD YYYY HH:mm:ss GMTZZ');
+        console.log(horaInicial);
+
+        let horaFinal = moment(moment().toString(), 'ddd MMM DD YYYY HH:mm:ss GMTZZ');
+        console.log(horaFinal);
+
+        const duration = moment.duration(horaFinal.diff(horaInicial));
+        const horas = duration.hours();
+        const minutos = duration.minutes();
+        const segundos = duration.seconds();
+
+        duracaoExercicio = formatarTempo(horas * 3600 + minutos * 60 + segundos);
     }
+
+    const formatarTempo = (tempo) => {
+        const horas = Math.floor(tempo / 3600);
+        const minutos = Math.floor((tempo % 3600) / 60);
+        const segundos = tempo % 60;
+
+        return `${horas.toString().padStart(2, '0')}:${minutos
+            .toString()
+            .padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+    };
 
     const validarCadastro = () => {
         if (props.route.params.idVideo1 == null ||
             props.route.params.idVideo2 == null ||
-            props.route.params.idVideo03 == null){
-                setContemErro(true);
-            }
+            props.route.params.idVideo03 == null) {
+            setContemErro(true);
+        }
     }
 
     const definirVideo = () => {
-        console.log("Definir video: " + videoAtual)
         switch (videoAtual) {
             case 1:
                 if (props.route.params.idVideo1 != null) {
@@ -58,7 +128,6 @@ const Exercicio = (props) => {
 
                 }
                 else {
-                    console.log('nao tem');
                     setIdVideo('');
                 }
                 break;
@@ -70,7 +139,6 @@ const Exercicio = (props) => {
                 }
                 else {
                     setIdVideo('');
-                    console.log('nao tem');
                 }
                 break;
             case 3:
@@ -80,18 +148,14 @@ const Exercicio = (props) => {
                 }
                 else {
                     setIdVideo('');
-                    console.log('nao tem');
                 }
                 break;
             default:
                 break;
         }
-        console.log("Soma do video: " + videoAtual)
-        console.log("id video: " + idVideo)
     }
 
     const proximoExercicio = () => {
-        console.log("proximo exercicio");
         setIdVideo('');
         setTimeout(() => {
             definirVideo();
@@ -99,7 +163,6 @@ const Exercicio = (props) => {
     }
 
     const finalizarExercicio = () => {
-        console.log("fim exercicio");
         setIsPlaying(false);
         setFimExercicio(true);
         realizarContagemTempo();
@@ -111,9 +174,7 @@ const Exercicio = (props) => {
             //video deveria ficar em looping mas so passa 2x
         }
         else if (state === PLAYER_STATES.PLAYING) {
-            setDataHoraInicial(new Date);
-            setIniciouExercicio(true);
-            console.log("Passou no playing")
+
         }
         else if (state === PLAYER_STATES.PAUSED) {
             console.log("Passou no pause")
@@ -137,7 +198,7 @@ const Exercicio = (props) => {
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button icon="flag-checkered" mode="contained" style={styles.buttom} onPress={() => navigation.navigate('Ofensiva')}>
+                        <Button icon="flag-checkered" mode="contained" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva", { ofensiva: listaOfensivas })}>
                             Ofensiva Diária
                         </Button>
                     </View>
@@ -154,7 +215,7 @@ const Exercicio = (props) => {
                             />
                         </View>}
                         <View>
-                        {contemErro && <Text>Alerta: Exercicio não cadastrado corretamente. contate o administrador do sistema</Text>}
+                            {contemErro && <Text>Alerta: Exercicio não cadastrado corretamente. contate o administrador do sistema</Text>}
                             {!videoReady && !fimExercicio && !contemErro && <ActivityIndicator style={styles.loadingContainer} />}
                             {!fimExercicio && videoAtual <= 3 && !contemErro &&
                                 <Button onPress={proximoExercicio} style={styles.buttom} mode="contained" icon="arrow-right-circle-outline">
