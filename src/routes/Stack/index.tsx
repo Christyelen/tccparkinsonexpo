@@ -14,12 +14,13 @@ import CadastroAdm from "../../pages/CadastroAdm";
 import CadastroVideo from "../../pages/CadastroVideo";
 import CadastroNives from "../../pages/CadastroNiveis";
 import CadastroBlog from "../../pages/CadastroBlog";
+import CriarUsuario from "../../pages/CriarUsuario";
 
 const {Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
 
 export default function(){
     return(
-        <Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+        <Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
             <Screen name="Home" component={Home}/>
             <Screen name="FichaAnamnese" component={FichaAnamnese}/>
             <Screen name="Exercicio" component={Exercicio}/>
@@ -32,6 +33,7 @@ export default function(){
             <Screen name="CadastroVideo" component={CadastroVideo} />
             <Screen name="CadastroNiveis" component={CadastroNives} />
             <Screen name="CadastroBlog" component={CadastroBlog} />
+            <Screen name="CriarUsuario" component={CriarUsuario} />
         </Navigator>
     )
 }

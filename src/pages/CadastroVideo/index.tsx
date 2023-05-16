@@ -71,13 +71,7 @@ const CadastroVideo = () => {
             setErrorNivel("Campo Nivel é obrigatório!");
             erros += 1;
         }
-        listaNiveis.map((item) => {
-            if (item.nivel == nivel) {
-                setErrorNivel("Não é possivel adicionar um nivel com mesmo valor.");
-                erros += 1;
-            }
-        })
-
+       
         let quantidadeVideosNivel = 0;
         listaExercicio.map((item) => {
             if (item.nivel == nivel) {

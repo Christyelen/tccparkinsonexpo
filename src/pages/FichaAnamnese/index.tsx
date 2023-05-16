@@ -6,6 +6,7 @@ import { TextInput, Button, Checkbox, HelperText } from 'react-native-paper';
 import { styles } from "./styles";
 import { addDoc, collection, doc, getFirestore, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
+import { getAuth } from "firebase/auth";
 
 
 const FichaAnamnese = (props) => {
@@ -14,6 +15,7 @@ const FichaAnamnese = (props) => {
     const [isVisibleRemedio, setIsVisibleRemedio] = useState(false);
     const [isVisibleCuidador, setIsVisibleCuidador] = useState(false);
     const [isReadOnly, setReadOnly] = useState(false);
+    const auth = getAuth();
 
     const [nome, setNome] = useState('')
     const [sobrenome, setSobrenome] = useState('')
@@ -61,6 +63,7 @@ const FichaAnamnese = (props) => {
     const [possuiErro, setPossuiErro] = useState(false);
 
     useEffect(() => {
+
         if (props.route.params.fichaAnamnese != null) {
             buscarIdFicha(props.route.params.fichaAnamnese);
             carregarValorCampos(props.route.params.fichaAnamnese);
@@ -68,6 +71,7 @@ const FichaAnamnese = (props) => {
         }
 
     }, []);
+
 
     const validarCampos = () => {
         let erros = 0
@@ -134,9 +138,15 @@ const FichaAnamnese = (props) => {
         }
     }
 
-    const carregarValorCampos = (fichaAnamnese) => {
-        const userData = fichaAnamnese[0];
-        setValor(userData);
+    const carregarValorCampos = (fichaAnamnese) => { // ver aqui p carregar certo
+
+        if (fichaAnamnese != null) {
+            for (let index = 0; index < fichaAnamnese.length; index++) {
+                if (auth.currentUser.uid == fichaAnamnese[index].usuario)
+                    setValor(fichaAnamnese[index]);
+
+            }
+        }
     }
 
     const setValor = (userData) => {
@@ -179,11 +189,11 @@ const FichaAnamnese = (props) => {
 
     const buscarIdFicha = (fichaAnamnese) => {
         if (fichaAnamnese != null) {
-            fichaAnamnese.map((item, index) => {
-                if (item.idPessoa == '123') { // colocar o IDPessoa 
+            for (let index = 0; index < fichaAnamnese.length; index++) {
+                if (auth.currentUser.uid == fichaAnamnese[index].usuario) {
                     setIdDocumento(fichaAnamnese[index].id);
                 }
-            });
+            }
         }
     }
 
@@ -192,6 +202,7 @@ const FichaAnamnese = (props) => {
     }
 
     const dados = {
+        usuario: auth.currentUser.uid,
         nome: nome,
         sobrenome: sobrenome,
         cpf: cpf,
@@ -245,7 +256,7 @@ const FichaAnamnese = (props) => {
     const salvarCampos = () => {
         if (validarCampos()) {
             if (!isReadOnly) {
-                if (idDocumento != null) { //fazer validação se ja possui um ID no banco
+                if (idDocumento != null) {
                     atualizarFicha(idDocumento);
                 } else {
                     addFicha();

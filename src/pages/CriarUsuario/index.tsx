@@ -2,49 +2,64 @@ import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
-import { Button, TextInput } from "react-native-paper";
+import { Button, Checkbox, TextInput } from "react-native-paper";
 import { styles } from "../Login/styles";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../../firebaseConfig";
 
-const Login = () => {
+const CriarUsuario = () => {
     const navigation = useNavigation<propsStack>()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+    const [coordenador, setCoordenador] = useState(false);
+
     const auth = getAuth();
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
-                console.log('Usuário autenticado:' + user);
                 navigation.replace("Home");
             }
         })
         return unsubscribe;
     }, [])
 
-    const signIn = () => {
-        const user = signInWithEmailAndPassword(auth, email, password).then(userCredentials => {
+
+    const signUp = () => {
+        const after = createUserWithEmailAndPassword(auth, email, password).then(userCredentials => {
             const user = userCredentials.user;
-        }).catch(error => alert(error.message));;
+            addUsuario(user.uid);
+        }).catch(error => alert(error.message));
+    }
+
+    const addUsuario = async (usuario) => {
+        const doc = await addDoc(collection(FIRESTORE_DB, 'usuario'), {usuario: usuario, coordenador: false, solicitacao: coordenador});
     }
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
+    };
+
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+        setCoordenador(!isChecked);
     };
     return (
         <>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-
-                        {/* <Button icon="arrow-left-circle" mode="outlined" style={styles.buttonCabecalho}
+                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttonCabecalho}
                             onPress={() => navigation.goBack()}>
                             Voltar
-                        </Button> */}
+                        </Button>
                     </View>
                     <View style={styles.container}>
-                        <Text style={styles.textGroup}>Entre ou inscreva-se</Text>
+                        <Text style={styles.textGroup}>Inscreva-se</Text>
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Email"
@@ -59,26 +74,26 @@ const Login = () => {
                             secureTextEntry={!showPassword}
                             right={<TextInput.Icon icon="eye" onPress={toggleShowPassword} />}
                         />
-                        <View style={{ flexDirection: "row" , padding: 10}}>
-
-                            <Text style={{ marginRight: 5 }}>Esqueceu sua senha?</Text>
-                            <TouchableOpacity onPress={() => { console.log("clicou") }}>
-                                <Text style={{ color: '#663399' }}>Clique aqui!</Text>
-                            </TouchableOpacity>
+                        <TextInput style={styles.campostexto}
+                            mode="outlined"
+                            label="Confirmar Senha"
+                            value={confirmPassword}
+                            onChangeText={(text: string) => setConfirmPassword(text)}
+                            secureTextEntry={!showPassword}
+                            right={<TextInput.Icon icon="eye" onPress={toggleShowPassword} />}
+                        />
+                        <View style={{ flexDirection: "row", alignSelf:"flex-start", marginTop:10 }}>
+                            <Checkbox.Android
+                               status={isChecked ? 'checked' : 'unchecked'}
+                               onPress={handleCheckboxChange}/>
+                            <Text style={{ alignSelf: "center" }}>Perfil de coordenador?</Text>
                         </View>
                         <Button
                             mode="contained"
                             style={styles.buttom}
                             labelStyle={styles.textButton}
-                            onPress={() => {navigation.navigate("CriarUsuario")}}>
+                            onPress={signUp}>
                             <Text>Criar novo usuário</Text>
-                        </Button>
-                        <Button
-                            mode="contained"
-                            style={styles.buttom}
-                            labelStyle={styles.textButton}
-                            onPress={signIn}>
-                            <Text>Entrar</Text>
                         </Button>
                     </View>
                 </ScrollView>
@@ -87,4 +102,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default CriarUsuario

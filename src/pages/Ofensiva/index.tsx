@@ -17,14 +17,15 @@ const Ofensiva = (props) => {
 
     useEffect(() => {
         setlistaOfensivas(props.route.params.ofensiva)
-        ordenarListagemDatas(props.route.params.ofensiva)
+        calcularDiasDeOfensiva(props.route.params.ofensiva)
     }, []);
 
-    const ordenarListagemDatas = async (listaOfensivasParametro) => {
+    const calcularDiasDeOfensiva = async (listaOfensivasParametro) => {
         listaOfensivasParametro.forEach(item => {
-            if (item.idPessoa == '') // colocar o idPessoa
-                listaOfensivasData.push(item.dataExercicioRealizado)
+            //  if (item.idPessoa == '') // colocar o idPessoa
+            listaOfensivasData.push(item.dataExercicioRealizado)
         });
+       // console.log("lista - " + listaOfensivasData)
 
         listaOfensivasData.sort((a, b) => {
             const dateA = new Date(a);
@@ -41,32 +42,29 @@ const Ofensiva = (props) => {
             return 0;
         });
 
-        console.log("Lista ordenada: " + listaOfensivasData);
-        calcularDiasDeOfensiva(listaOfensivasParametro)
-        setlistaOfensivasData(listaOfensivasData)
-    }
-
-    const calcularDiasDeOfensiva = async (listaOfensivasParametro) => {
-
         let contadorDiasConsecutivos = 0;
         let ultimoDocumentoData = moment(moment().format('YYYY-MM-DD'), 'YYYY-MM-DD');
 
-        //  console.log("lista ofensiva inicio" + JSON.stringify(listaOfensivasParametro, null, 2));
+        for (let index = 0; index < listaOfensivasData.length; index++) {
+            const dataOfensiva = moment(listaOfensivasData[index], 'YYYY-MM-DD');
+            if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 1) {
+                contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
+                ultimoDocumentoData = dataOfensiva;
+                console.log("lista ofensiva dentro if" + ultimoDocumentoData);
 
-        listaOfensivasParametro.forEach((ofensiva) => {
-            if (ofensiva.idPessoa == true) { //colocar o idPessoa no lugar do true
-                const dataOfensiva = moment(ofensiva.dataExercicioRealizado, 'YYYY-MM-DD');
-                if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 1) {
-                    contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
-                    ultimoDocumentoData = dataOfensiva;
-                }
-                // else if(ultimoDocumentoData.diff(dataOfensiva, 'days') === 0){
-                //     contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
-                //     ultimoDocumentoData = //ver como colocar a proxima data
-                // }
             }
-        });
-
+            else if(ultimoDocumentoData.diff(dataOfensiva, 'days') === 0){
+               // console.log("passou aq")
+            }
+        }
+        // listaOfensivasData.forEach((ofensiva) => {
+            
+        //     // else if(ultimoDocumentoData.diff(dataOfensiva, 'days') === 0){
+        //     //     contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
+        //     //     ultimoDocumentoData = //ver como colocar a proxima data
+        //     // }
+        // });
+        setlistaOfensivasData(listaOfensivasData)
         setDiasOfensiva(contadorDiasConsecutivos);
     }
 

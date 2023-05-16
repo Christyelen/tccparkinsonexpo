@@ -92,6 +92,12 @@ const CadastroNives = () => {
             setErrorNivel("Campo Nivel é obrigatório!");
             erros += 1;
         }
+        listaNiveis.map((item) => {
+            if (item.nivel == nivel) {
+                setErrorNivel("Não é possivel adicionar um nivel com mesmo valor.");
+                erros += 1;
+            }
+        })
 
         if (erros > 0) {
             setPossuiErro(true);
