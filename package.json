@@ -30,7 +30,7 @@
     "react-native-share": "^8.2.2",
     "react-native-vector-icons": "^9.2.0",
     "react-native-video": "^5.2.1",
-    "react-native-view-shot": "3.5.0",
+    "react-native-view-shot": "^3.5.0",
     "react-native-webview": "11.26.0",
     "react-native-youtube-iframe": "^2.2.2",
     "typescript": "^4.9.4"

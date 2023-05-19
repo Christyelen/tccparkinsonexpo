@@ -70,7 +70,9 @@ const FichaAnamnese = (props) => {
             setarCamposReadOnly();
         }
 
-    }, []);
+    }, []); // aq coloqcaria a ficha anamnses
+
+    //faze o usecallback
 
 
     const validarCampos = () => {
@@ -324,8 +326,15 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="CPF"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setCpf(text)}
+                                onChangeText={(text: string) => {
+                                    setCpf(text.replace(/\D/g, '')
+                                    .replace(/(\d{3})(\d)/, '$1.$2')
+                                    .replace(/(\d{3})(\d)/, '$1.$2')
+                                    .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+                                    .replace(/(-\d{2})\d+?$/, '$1'))
+                                }}
                                 value={cpf}
+                                
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
                             />
@@ -334,7 +343,7 @@ const FichaAnamnese = (props) => {
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
                                 label="RG"
-                                onChangeText={(text: string) => setRg(text)}
+                                onChangeText={(text: string) => setRg(text.replace(/^(\d{1,2})(\d{3})(\d{3})([\dX])$/,'$1.$2.$3-$4'))}
                                 value={rg}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -346,7 +355,7 @@ const FichaAnamnese = (props) => {
                                 keyboardType="numeric"
                                 placeholder="dia/ mês/ ano"
                                 label="Data de Nascimento"
-                                onChangeText={(text: string) => setDataNascimento(text)}
+                                onChangeText={(text: string) => setDataNascimento(text.replace(/^(\d{2})(\d{2})(\d{4})$/, "$1/$2/$3"))}
                                 value={dataNascimento}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -367,7 +376,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="Peso"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setPeso(text)}
+                                onChangeText={(text: string) => setPeso(text.replace(/^(\d+(\.\d{1,2})?)kg$/, "$1 kg"))}
                                 value={peso}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -376,7 +385,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="Altura"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setAltura(text)}
+                                onChangeText={(text: string) => setAltura(text.replace(/^(\d+(\.\d{1})?)m$/,"$1 m"))}
                                 value={altura}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -385,7 +394,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="Telefone"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setTelefone(text)}
+                                onChangeText={(text: string) => setTelefone(text.replace(/(\d{2})\s(\d{2})\s(\d{5})-(\d{4})/, "($1) $2 $3-$4"))}
                                 value={telefone}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -423,7 +432,7 @@ const FichaAnamnese = (props) => {
                                     mode="outlined"
                                     label="Cartão Nacional da Saúde"
                                     keyboardType="numeric"
-                                    onChangeText={(text: string) => setCartaoPlano(text)}
+                                    onChangeText={(text: string) => setCartaoPlano(text.replace(/^(\d{4})(\d{4})(\d{4})(\d{4})$/, "$1 $2 $3 $4"))}
                                     value={cartaoPlano}
                                     editable={!isReadOnly}
                                     theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -454,7 +463,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="CEP"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setCep(text)}
+                                onChangeText={(text: string) => setCep(text.replace(/^(\d{5})(\d{3})$/, "$1-$2"))}
                                 value={cep}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -531,7 +540,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="CRM do médico"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setCrmMedico(text)}
+                                onChangeText={(text: string) => setCrmMedico(text.replace(/^(\d{5})([A-Za-z]{2})$/,"$1/$2"))}
                                 value={crmMedico}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}

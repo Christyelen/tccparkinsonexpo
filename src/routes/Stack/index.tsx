@@ -15,6 +15,7 @@ import CadastroVideo from "../../pages/CadastroVideo";
 import CadastroNives from "../../pages/CadastroNiveis";
 import CadastroBlog from "../../pages/CadastroBlog";
 import CriarUsuario from "../../pages/CriarUsuario";
+import AprovarCoordenador from "../../pages/AprovarCoordenador";
 
 const {Navigator, Screen } = createNativeStackNavigator<propsNavigationStack>()
 
@@ -34,6 +35,7 @@ export default function(){
             <Screen name="CadastroNiveis" component={CadastroNives} />
             <Screen name="CadastroBlog" component={CadastroBlog} />
             <Screen name="CriarUsuario" component={CriarUsuario} />
+            <Screen name="AprovarCoordenador" component={AprovarCoordenador} />
         </Navigator>
     )
 }

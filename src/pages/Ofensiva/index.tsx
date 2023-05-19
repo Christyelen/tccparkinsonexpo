@@ -7,25 +7,30 @@ import { Button } from "react-native-paper";
 import ViewShot from 'react-native-view-shot';
 import moment from "moment";
 import { Calendar } from "react-native-calendars";
+//import { encode } from 'base-64';
+
 
 const Ofensiva = (props) => {
     const navigation = useNavigation<propsStack>()
-    const viewShotRef = useRef(null);
     const [listaOfensivas, setlistaOfensivas] = useState([]);
     const [listaOfensivasData, setlistaOfensivasData] = useState([]);
     const [diasOfensiva, setDiasOfensiva] = useState(0);
+    const viewShotRef = useRef(null);
+
 
     useEffect(() => {
         setlistaOfensivas(props.route.params.ofensiva)
         calcularDiasDeOfensiva(props.route.params.ofensiva)
     }, []);
 
+
+
     const calcularDiasDeOfensiva = async (listaOfensivasParametro) => {
         listaOfensivasParametro.forEach(item => {
             //  if (item.idPessoa == '') // colocar o idPessoa
             listaOfensivasData.push(item.dataExercicioRealizado)
         });
-       // console.log("lista - " + listaOfensivasData)
+        // console.log("lista - " + listaOfensivasData)
 
         listaOfensivasData.sort((a, b) => {
             const dateA = new Date(a);
@@ -53,12 +58,12 @@ const Ofensiva = (props) => {
                 console.log("lista ofensiva dentro if" + ultimoDocumentoData);
 
             }
-            else if(ultimoDocumentoData.diff(dataOfensiva, 'days') === 0){
-               // console.log("passou aq")
+            else if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 0) {
+                // console.log("passou aq")
             }
         }
         // listaOfensivasData.forEach((ofensiva) => {
-            
+
         //     // else if(ultimoDocumentoData.diff(dataOfensiva, 'days') === 0){
         //     //     contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
         //     //     ultimoDocumentoData = //ver como colocar a proxima data
@@ -74,9 +79,12 @@ const Ofensiva = (props) => {
             if (viewShotRef.current) {
                 try {
                     const uri = await viewShotRef.current.capture();
+                   // const base64String = encode(uri);
+                   // console.log(base64String);
                     const result = await Share.share({
                         message: 'Confira minha ofensiva diária!',
-                        url: uri,
+                        url: `file://${uri}`,
+
                     });
                     if (result.action === Share.sharedAction) {
                         console.log('Conteúdo compartilhado com sucesso!');

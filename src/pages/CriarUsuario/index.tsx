@@ -7,16 +7,19 @@ import { styles } from "../Login/styles";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
+//import * from 'react-native-mail-composer';
+
 
 const CriarUsuario = () => {
     const navigation = useNavigation<propsStack>()
-    const [email, setEmail] = useState('');
+    const [emailValue, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [coordenador, setCoordenador] = useState(false);
-
+    const [cpf, setCpf] = useState('');
+    const EMAIL_ADM = "christyelenkra@gmail.com";
     const auth = getAuth();
 
     useEffect(() => {
@@ -28,16 +31,20 @@ const CriarUsuario = () => {
         return unsubscribe;
     }, [])
 
-
     const signUp = () => {
-        const after = createUserWithEmailAndPassword(auth, email, password).then(userCredentials => {
+        const after = createUserWithEmailAndPassword(auth, emailValue, password).then(userCredentials => {
             const user = userCredentials.user;
-            addUsuario(user.uid);
+            if (coordenador) {
+                addUsuario(user.uid, cpf);
+            }
+            else {
+                addUsuario(user.uid, "");
+            }
         }).catch(error => alert(error.message));
     }
 
-    const addUsuario = async (usuario) => {
-        const doc = await addDoc(collection(FIRESTORE_DB, 'usuario'), {usuario: usuario, coordenador: false, solicitacao: coordenador});
+    const addUsuario = async (usuario, cpf) => {
+        const doc = await addDoc(collection(FIRESTORE_DB, 'usuario'), { usuario: usuario, cpf: cpf, coordenador: false, solicitacao: coordenador });
     }
 
     const toggleShowPassword = () => {
@@ -63,7 +70,7 @@ const CriarUsuario = () => {
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Email"
-                            value={email}
+                            value={emailValue}
                             onChangeText={(text: string) => setEmail(text)}
                         />
                         <TextInput style={styles.campostexto}
@@ -82,11 +89,18 @@ const CriarUsuario = () => {
                             secureTextEntry={!showPassword}
                             right={<TextInput.Icon icon="eye" onPress={toggleShowPassword} />}
                         />
-                        <View style={{ flexDirection: "row", alignSelf:"flex-start", marginTop:10 }}>
+                        <View style={{ flexDirection: "row", alignSelf: "flex-start", marginTop: 10 }}>
                             <Checkbox.Android
-                               status={isChecked ? 'checked' : 'unchecked'}
-                               onPress={handleCheckboxChange}/>
+                                status={isChecked ? 'checked' : 'unchecked'}
+                                onPress={handleCheckboxChange} />
                             <Text style={{ alignSelf: "center" }}>Perfil de coordenador?</Text>
+                            {handleCheckboxChange &&
+                                <TextInput style={styles.campostexto}
+                                    mode="outlined"
+                                    label="CPF"
+                                    value={cpf}
+                                    onChangeText={(text: string) => setCpf(text)}
+                                />}
                         </View>
                         <Button
                             mode="contained"

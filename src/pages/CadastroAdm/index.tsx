@@ -1,19 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, ScrollView } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
 import { Button } from "react-native-paper";
 import { getAuth, signOut } from "firebase/auth";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../../firebaseConfig";
 
 const CadastroAdm = () => {
     const navigation = useNavigation<propsStack>()
+    const [isAdmPrincipal, setIsAdmPrincipal] = useState(false);
+    const [listaUsuario, setlistaUsuario] = useState([]);
+    const auth = getAuth();
 
-    const handleSignOut = () => {
-        const auth = getAuth()
-        signOut(auth).then(() => {
-            navigation.replace("Login");
-        }).catch(error => alert(error.message))
+    useEffect(() => {
+        buscarAdmPrincipal();
+    }, []);
+
+    useEffect(() => {
+        validarUsuarioAdm();
+    })
+
+    const buscarAdmPrincipal = async () => {
+        try {
+            const usuariosRef = collection(FIRESTORE_DB, 'usuario');
+            const subscriber = onSnapshot(usuariosRef, {
+                next: (snapshot) => {
+                    const usuario: any[] = [];
+                    snapshot.docs.forEach((doc) => {
+                        usuario.push({
+                            id: doc.id,
+                            ...doc.data()
+                        })
+                    });
+                    setlistaUsuario(usuario)
+                }
+            });
+            return () => subscriber();
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const validarUsuarioAdm = () => {
+        listaUsuario.filter(usuario => usuario.administrador).map(ListaUsuario =>{
+            console.log("userID " + ListaUsuario.usuario + "auth "+ auth.currentUser.uid)
+            if (auth.currentUser.uid == ListaUsuario.usuario) {
+                setIsAdmPrincipal(true);
+            }
+        });
     }
 
     return (
@@ -21,15 +57,13 @@ const CadastroAdm = () => {
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-
                         <Button icon="arrow-left-circle" mode="outlined" style={styles.buttonCabecalho}
-                            onPress={handleSignOut}>
-                            Sair
+                            onPress={() => navigation.goBack()}>
+                            Voltar
                         </Button>
                     </View>
                     <View style={styles.container}>
                         <Text style={styles.textGroup}>Área do Administrador</Text>
-
                         <Button
                             mode="contained"
                             style={styles.buttom}
@@ -53,6 +87,14 @@ const CadastroAdm = () => {
                             onPress={() => navigation.navigate("CadastroBlog")}>
                             <Text>Cadastrar registros Blog</Text>
                         </Button>
+
+                        {isAdmPrincipal && <Button
+                            mode="contained"
+                            style={styles.buttom}
+                            labelStyle={styles.textButton}
+                            onPress={() => navigation.navigate("AprovarCoordenador")}>
+                            <Text>Avaliar Coordenadores</Text>
+                        </Button>}
                     </View>
                 </ScrollView>
             </SafeAreaView>
