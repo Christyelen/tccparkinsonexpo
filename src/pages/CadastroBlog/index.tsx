@@ -10,12 +10,10 @@ import { FIRESTORE_DB } from "../../../firebaseConfig";
 
 const CadastroBlog = () => {
     const navigation = useNavigation<propsStack>()
-    const [urlimage, setURLImage] = useState('');
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState(null);
     const [titulo, setTitulo] = useState('');
     const [descricao, setDescricao] = useState('');
     const [urlMateria, setUrlMateria] = useState('');
-    const [materia, setMateria] = useState('')
 
     const [listaMaterias, setlistaMaterias] = useState([]);
 
@@ -79,9 +77,8 @@ const CadastroBlog = () => {
 
     const addMateria = async () => {
         if (validarCampos()) {
-            const doc = await addDoc(collection(FIRESTORE_DB, 'blog'), { titulo: titulo, descricao: descricao, urlImage: urlimage, urlMateria: urlMateria });
+            const doc = await addDoc(collection(FIRESTORE_DB, 'blog'), { titulo: titulo, descricao: descricao, urlImage: image, urlMateria: urlMateria });
             console.log('Passou')
-            setMateria('');
         }
     }
 
@@ -92,10 +89,10 @@ const CadastroBlog = () => {
             aspect: [4, 3],
             quality: 1,
         });
-        console.log(result);
+        console.log(result.assets[0].uri);
 
         if (!result.canceled) {
-            setURLImage('../../../assets/imagens/LogoApp.png');
+            setImage(result.assets[0].uri);
         }
     };
 
@@ -119,7 +116,7 @@ const CadastroBlog = () => {
                     titulo: titulo,
                     descricao: descricao,
                     urlMateria: urlMateria,
-                    urlimage: urlimage
+                    urlimage: image
                 });
                 console.log('Documento atualizado com sucesso!');
             }
@@ -174,14 +171,9 @@ const CadastroBlog = () => {
                         />
                         {possuiErro && <HelperText type="error">{errorURLMateria}</HelperText>}
 
-                        <View style={styles.containerImage}>
-                            {image ? (
-                                <Image source={{ uri: image }} style={styles.image} />
-                            ) : (
-                                <Button mode="outlined" style={styles.buttomImage} icon={'camera-outline'} onPress={handleImageSelect}>
-                                    Selecionar imagem para matéria
-                                </Button>
-                            )}
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <Button onPress={() => handleImageSelect()} >Pick an image from camera roll</Button>
+                            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
                         </View>
                     </View>
                     <View style={styles.containerTabela}>

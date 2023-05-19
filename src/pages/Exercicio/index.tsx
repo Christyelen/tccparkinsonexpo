@@ -9,6 +9,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { addDoc, collection, onSnapshot, query, where } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
 import moment from 'moment';
+import { getAuth } from "firebase/auth";
 
 const Exercicio = (props) => {
 
@@ -25,6 +26,7 @@ const Exercicio = (props) => {
     const [dataHoraInicial, setDataHoraInicial] = useState('');
     let duracaoExercicio = '';
     const [listaOfensivas, setlistaOfensivas] = useState([]);
+    const auth = getAuth();
 
     useEffect(() => {
         definirVideo();
@@ -80,7 +82,7 @@ const Exercicio = (props) => {
 
     const addOfensiva = () => {
         const dataExercicioRealizado = moment();
-        addDoc(collection(FIRESTORE_DB, 'ofensiva'), { dataExercicioRealizado: dataExercicioRealizado.format('YYYY-MM-DD'), dataOrdenacao: dataExercicioRealizado.toDate(), tempoDuracaoExercicio: duracaoExercicio });
+        addDoc(collection(FIRESTORE_DB, 'ofensiva'), { dataExercicioRealizado: dataExercicioRealizado.format('YYYY-MM-DD'), dataOrdenacao: dataExercicioRealizado.toDate(), tempoDuracaoExercicio: duracaoExercicio, usuario: auth.currentUser.uid});
         console.log('Passou valor Ofensiva')
         buscarOfensivas();
     }
@@ -198,7 +200,7 @@ const Exercicio = (props) => {
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button icon="flag-checkered" mode="contained" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva", { ofensiva: listaOfensivas })}>
+                        <Button icon="flag-checkered" mode="contained" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva")}>
                             Ofensiva Diária
                         </Button>
                     </View>

@@ -16,7 +16,6 @@ const Login = () => {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
-                console.log('Usuário autenticado:' + user);
                 navigation.replace("Home");
             }
         })

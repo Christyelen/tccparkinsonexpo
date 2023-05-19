@@ -11,16 +11,18 @@ import { getAuth } from "firebase/auth";
 const Home = () => {
     const navigation = useNavigation<propsStack>();
     const [fichaAnamnese, setFichaAnamnese] = useState([]);
-    const [listaOfensivas, setlistaOfensivas] = useState([]);
     const [listaUsuario, setlistaUsuario] = useState([]);
     const [usuarioPossuiPermissao, setusuarioPossuiPermissao] = useState(false);
     const auth = getAuth();
 
     useEffect(() => {
         buscarFichaAnamnese();
-        buscarOfensivas();
         buscarUsuario();
     }, []);
+
+    useEffect(() =>{
+        validarPossuiRegraCoordenador(listaUsuario)
+    })
 
     const buscarFichaAnamnese = () => {
         try {
@@ -45,30 +47,6 @@ const Home = () => {
             alert(error.message);
         }
     };
-
-    const buscarOfensivas = async () => {
-        try {
-            const ofensivasRef = collection(FIRESTORE_DB, 'ofensiva');
-            const q = query(ofensivasRef, where('idPessoa', '==', '')); //colocar o IdPessoa
-            const subscriber = onSnapshot(ofensivasRef, {
-                next: (snapshot) => {
-                    const ofensivas: any[] = [];
-                    snapshot.docs.forEach((doc) => {
-                        ofensivas.push({
-                            id: doc.id,
-                            ...doc.data()
-                        })
-                    });
-                    setlistaOfensivas(ofensivas)
-
-                }
-            });
-            return () => subscriber();
-        } catch (error) {
-            alert(error.message);
-        }
-    };
-
     const buscarUsuario = async () => {
         try {
             const usuariosRef = collection(FIRESTORE_DB, 'usuario');
@@ -82,7 +60,6 @@ const Home = () => {
                             ...doc.data()
                         })
                     });
-                    validarPossuiRegraCoordenador(usuario)
                     setlistaUsuario(usuario)
                 }
             });
@@ -93,10 +70,13 @@ const Home = () => {
     };
 
     const validarPossuiRegraCoordenador = (usuario) => {
+        console.log(auth.currentUser.uid)
+
         for (let index = 0; index < usuario.length; index++) {
-            console.log(auth.currentUser.uid == usuario[index].usuario)
-            if (auth.currentUser.uid == usuario[index].usuario)
+            if (auth.currentUser.uid == usuario[index].usuario){
                 setusuarioPossuiPermissao(usuario[index].coordenador);
+                console.log(usuario[index].coordenador)
+            }
         }
     }
 
@@ -136,7 +116,7 @@ const Home = () => {
                             mode="contained"
                             style={styles.buttom}
                             labelStyle={styles.textButton}
-                            onPress={() => navigation.navigate("Ofensiva", { ofensiva: listaOfensivas })}>
+                            onPress={() => navigation.navigate("Ofensiva")}>
                             <Text>Ofensiva</Text>
                         </Button>
 

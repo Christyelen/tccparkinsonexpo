@@ -7,31 +7,57 @@ import { Button } from "react-native-paper";
 import ViewShot from 'react-native-view-shot';
 import moment from "moment";
 import { Calendar } from "react-native-calendars";
-//import { encode } from 'base-64';
-
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../../firebaseConfig";
+import { getAuth } from "firebase/auth";
 
 const Ofensiva = (props) => {
     const navigation = useNavigation<propsStack>()
     const [listaOfensivas, setlistaOfensivas] = useState([]);
     const [listaOfensivasData, setlistaOfensivasData] = useState([]);
     const [diasOfensiva, setDiasOfensiva] = useState(0);
+    const [diaAtualContado, setDiaAtualContado] = useState(false);
     const viewShotRef = useRef(null);
-
+    const auth = getAuth();
 
     useEffect(() => {
-        setlistaOfensivas(props.route.params.ofensiva)
-        calcularDiasDeOfensiva(props.route.params.ofensiva)
+        buscarOfensivas();
+    }, []);
+
+    useEffect(() => {
+        ordenarListaDatas()
+    }, []);
+
+    useEffect(() => {
+        calcularDiasDeOfensiva()
     }, []);
 
 
+    const buscarOfensivas = async () => {
+        try {
+            const ofensivasRef = await collection(FIRESTORE_DB, 'ofensiva');
+            const subscriber = onSnapshot(ofensivasRef, {
+                next: (snapshot) => {
+                    const ofensivas: any[] = [];
+                    snapshot.docs.forEach((doc) => {
+                        ofensivas.push({
+                            id: doc.id,
+                            ...doc.data()
+                        })
+                    });
+                    setlistaOfensivas(ofensivas)
+                }
+            });
+            return () => subscriber();
+        } catch (error) {
+            alert(error.message);
+        }
+    };
 
-    const calcularDiasDeOfensiva = async (listaOfensivasParametro) => {
-        listaOfensivasParametro.forEach(item => {
-            //  if (item.idPessoa == '') // colocar o idPessoa
+    const ordenarListaDatas = () => {
+        listaOfensivas.filter(ofensiva => ofensiva.usuario == auth.currentUser.uid).map(item => {
             listaOfensivasData.push(item.dataExercicioRealizado)
         });
-        // console.log("lista - " + listaOfensivasData)
-
         listaOfensivasData.sort((a, b) => {
             const dateA = new Date(a);
             const dateB = new Date(b);
@@ -46,10 +72,16 @@ const Ofensiva = (props) => {
 
             return 0;
         });
+        console.log("cima "+listaOfensivasData);
+
+        setlistaOfensivasData(listaOfensivasData);
+    }
+
+    const calcularDiasDeOfensiva = async () => {
 
         let contadorDiasConsecutivos = 0;
         let ultimoDocumentoData = moment(moment().format('YYYY-MM-DD'), 'YYYY-MM-DD');
-
+        console.log(listaOfensivasData);
         for (let index = 0; index < listaOfensivasData.length; index++) {
             const dataOfensiva = moment(listaOfensivasData[index], 'YYYY-MM-DD');
             if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 1) {
@@ -58,18 +90,11 @@ const Ofensiva = (props) => {
                 console.log("lista ofensiva dentro if" + ultimoDocumentoData);
 
             }
-            else if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 0) {
-                // console.log("passou aq")
+            else if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 0 && !diaAtualContado) {
+                contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
+                setDiaAtualContado(true)
             }
         }
-        // listaOfensivasData.forEach((ofensiva) => {
-
-        //     // else if(ultimoDocumentoData.diff(dataOfensiva, 'days') === 0){
-        //     //     contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
-        //     //     ultimoDocumentoData = //ver como colocar a proxima data
-        //     // }
-        // });
-        setlistaOfensivasData(listaOfensivasData)
         setDiasOfensiva(contadorDiasConsecutivos);
     }
 
@@ -79,11 +104,9 @@ const Ofensiva = (props) => {
             if (viewShotRef.current) {
                 try {
                     const uri = await viewShotRef.current.capture();
-                   // const base64String = encode(uri);
-                   // console.log(base64String);
                     const result = await Share.share({
                         message: 'Confira minha ofensiva diária!',
-                        url: `file://${uri}`,
+                        url: `file://${uri}`, //não funciona whatsapp
 
                     });
                     if (result.action === Share.sharedAction) {
