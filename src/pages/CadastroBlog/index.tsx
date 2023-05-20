@@ -14,6 +14,7 @@ const CadastroBlog = () => {
     const [titulo, setTitulo] = useState('');
     const [descricao, setDescricao] = useState('');
     const [urlMateria, setUrlMateria] = useState('');
+    const [idDocumento, setIdDocumento] = useState('');
     const [estaEditando, setEstaEditando] = useState(false);
     const [mostrarAlerta, setMostrarAlerta] = useState(false);
 
@@ -91,6 +92,8 @@ const CadastroBlog = () => {
         setDescricao('');
         setUrlMateria('');
         setImage('');
+        setIdDocumento('');
+        setEstaEditando(false);
     }
 
     const handleImageSelect = async () => {
@@ -141,9 +144,10 @@ const CadastroBlog = () => {
             setImage(materia.image);
         })
         setEstaEditando(true);
+        setIdDocumento(idDocumento);
     }
 
-    const editarRegistro = async (idDocumento) => {
+    const editarRegistro = async () => {
         console.log("Editar")
         try {
             if (validarCampos()) {
@@ -152,7 +156,7 @@ const CadastroBlog = () => {
                     titulo: titulo,
                     descricao: descricao,
                     urlMateria: urlMateria,
-                    urlimage: image
+                    urlimage: image ? image : null
                 });
                 limparCampos();
                 exibirAlerta();
