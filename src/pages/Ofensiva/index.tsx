@@ -105,7 +105,7 @@ const Ofensiva = (props) => {
                 try {
                     const uri = await viewShotRef.current.capture();
                     const result = await Share.share({
-                        message: 'Confira minha ofensiva diária!',
+                        message: `Estou realizando exercicios diariamente há ${diasOfensiva} dias!`,
                         url: `file://${uri}`, //não funciona whatsapp
 
                     });

@@ -59,30 +59,15 @@ const Exercicio = (props) => {
     };
 
     const iniciarExercicioAlerta = () => {
-        if (!videoReady) {
-            Alert.alert(
-                'Título do Alerta',
-                'Mensagem de confirmação',
-                [
-                    {
-                        text: 'Cancelar',
-                        style: 'cancel',
-                    },
-                    {
-                        text: 'Confirmar',
-                        onPress: () => {
-                            setDataHoraInicial(moment().toString());
-                            console.log("data inicial: " + moment().toString());
-                        },
-                    },
-                ],
-            );
-        }
+        if (!videoReady)
+            setDataHoraInicial(moment().toString());
+
+        console.log("Passou no iniciar")
     }
 
     const addOfensiva = () => {
         const dataExercicioRealizado = moment();
-        addDoc(collection(FIRESTORE_DB, 'ofensiva'), { dataExercicioRealizado: dataExercicioRealizado.format('YYYY-MM-DD'), dataOrdenacao: dataExercicioRealizado.toDate(), tempoDuracaoExercicio: duracaoExercicio, usuario: auth.currentUser.uid});
+        addDoc(collection(FIRESTORE_DB, 'ofensiva'), { dataExercicioRealizado: dataExercicioRealizado.format('YYYY-MM-DD'), dataOrdenacao: dataExercicioRealizado.toDate(), tempoDuracaoExercicio: duracaoExercicio, usuario: auth.currentUser.uid });
         console.log('Passou valor Ofensiva')
         buscarOfensivas();
     }

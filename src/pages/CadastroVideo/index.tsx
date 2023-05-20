@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, FlatList } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
 import { Button, Card, DataTable, HelperText, List, TextInput } from "react-native-paper";
 import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
+import RNPickerSelect from "react-native-picker-select";
 
 const CadastroVideo = () => {
     const navigation = useNavigation<propsStack>()
@@ -67,11 +68,12 @@ const CadastroVideo = () => {
             setErrorDescricao("Campo Descrição é obrigatório!");
             erros += 1;
         }
-        if (nivel == '') {
+        if (nivel == null) {
             setErrorNivel("Campo Nivel é obrigatório!");
             erros += 1;
         }
-       
+        console.log(nivel)
+
         let quantidadeVideosNivel = 0;
         listaExercicio.map((item) => {
             if (item.nivel == nivel) {
@@ -150,8 +152,14 @@ const CadastroVideo = () => {
             setExercicio('');
         }
     }
-
-
+    const pickerStyle = {
+        inputIOSContainer: {
+            padding: 15,
+        },
+        inputAndroidContainer: {
+            padding: 15,
+        },
+    };
 
     return (
         <>
@@ -199,13 +207,27 @@ const CadastroVideo = () => {
                             value={descricaoExercicio}
                         />
                         {possuiErro && <HelperText type="error">{errorDescricao}</HelperText>}
-
-                        <TextInput style={styles.campostexto}
-                            mode="outlined"
-                            label="Nivel"
-                            onChangeText={(text: string) => setNivel(text)}
-                            value={nivel}
-                        />
+                        <View style={{
+                            flex: 1,
+                            backgroundColor: "#fff",
+                            alignItems: "center",
+                            width: '100%',
+                            height: 45,
+                            borderRadius: 3,
+                            borderStyle: "solid",
+                            borderWidth: 1,
+                            borderColor: "#808080",
+                            marginTop: 15,
+                            justifyContent: "center",
+                        }}>
+                            <RNPickerSelect
+                                placeholder={{ label: 'Selecione um nivel', value: null }}
+                                value={nivel}
+                                style={pickerStyle}
+                                onValueChange={(itemValue) => setNivel(itemValue)}
+                                items={listaNiveis}
+                            />
+                        </View>
                         {possuiErro && <HelperText type="error">{errorNivel}</HelperText>}
 
                     </View>

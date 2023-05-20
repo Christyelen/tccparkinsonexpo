@@ -24,8 +24,6 @@ const PreExercicio = (props) => {
             videos.push(preExercicio.idVideo);
         }
         setVideos(videos);
-        console.log(videos);
-        console.log(videos[0]);
     }
 
     const filtrarExercicios = (nivel, listaPreExercicio) => {
@@ -55,7 +53,7 @@ const PreExercicio = (props) => {
                             mode="contained"
                             icon="run"
                             onPress={() => { navigation.navigate("Exercicio", { idVideo1: videos[0] ? videos[0]: null, idVideo2: videos[1] ? videos[1]: null, idVideo03: videos[2] ? videos[2]: null }) }}>
-                            <Text>Exercicio</Text>
+                            <Text>Iniciar Exercicio</Text>
                         </Button>
                     </View>
                     <View style={styles.container}>

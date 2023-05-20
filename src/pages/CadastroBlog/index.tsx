@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, SafeAreaView, ScrollView } from "react-native"
+import { View, Text, Image, SafeAreaView, ScrollView, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
-import { Button, Card, DataTable, HelperText, TextInput } from "react-native-paper";
+import { Badge, Button, Card, DataTable, HelperText, TextInput } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
@@ -14,6 +14,9 @@ const CadastroBlog = () => {
     const [titulo, setTitulo] = useState('');
     const [descricao, setDescricao] = useState('');
     const [urlMateria, setUrlMateria] = useState('');
+    const [estaEditando, setEstaEditando] = useState(false);
+    const [mostrarAlerta, setMostrarAlerta] = useState(false);
+
 
     const [listaMaterias, setlistaMaterias] = useState([]);
 
@@ -78,8 +81,16 @@ const CadastroBlog = () => {
     const addMateria = async () => {
         if (validarCampos()) {
             const doc = await addDoc(collection(FIRESTORE_DB, 'blog'), { titulo: titulo, descricao: descricao, urlImage: image, urlMateria: urlMateria });
-            console.log('Passou')
+            exibirAlerta();
+            limparCampos();
         }
+    }
+
+    const limparCampos = () => {
+        setTitulo('');
+        setDescricao('');
+        setUrlMateria('');
+        setImage('');
     }
 
     const handleImageSelect = async () => {
@@ -97,14 +108,39 @@ const CadastroBlog = () => {
     };
 
     const excluirRegistro = (idDocumento) => {
-        console.log("Excluir")
-        const documentRef = doc(FIRESTORE_DB, 'blog', idDocumento);
-        // Remove o documento
-        deleteDoc(documentRef).then(() => {
-            console.log('Documento removido com sucesso!');
-        }).catch((error) => {
-            console.error('Erro ao remover o documento:', error);
-        });
+        Alert.alert(
+            'Excluir?',
+            'Deseja realmente excluir o registro?',
+            [
+                {
+                    text: 'Sim', onPress: () => {
+                        const documentRef = doc(FIRESTORE_DB, 'blog', idDocumento);
+                        // Remove o documento
+                        deleteDoc(documentRef).then(() => {
+                            console.log('Documento removido com sucesso!');
+                        }).catch((error) => {
+                            console.error('Erro ao remover o documento:', error);
+                        });
+
+                    }
+                },
+                {
+                    text: 'Não', onPress: () => {
+                    }
+                }
+            ]
+        );
+
+    }
+
+    const preencherCamposEdicao = (idDocumento) => {
+        listaMaterias.filter((item) => item.id == idDocumento).map(materia => {
+            setTitulo(materia.titulo);
+            setDescricao(materia.descricao);
+            setUrlMateria(materia.urlMateria);
+            setImage(materia.image);
+        })
+        setEstaEditando(true);
     }
 
     const editarRegistro = async (idDocumento) => {
@@ -118,12 +154,21 @@ const CadastroBlog = () => {
                     urlMateria: urlMateria,
                     urlimage: image
                 });
+                limparCampos();
+                exibirAlerta();
                 console.log('Documento atualizado com sucesso!');
             }
         } catch (error) {
             console.error('Erro ao atualizar o documento:', error);
         }
     }
+
+    const exibirAlerta = () => {
+        setMostrarAlerta(true);
+        setTimeout(() => {
+            setMostrarAlerta(false);
+        }, 3000);
+    };
 
     return (
 
@@ -136,14 +181,20 @@ const CadastroBlog = () => {
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                        {!estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
                             onPress={addMateria}>
                             Salvar
-                        </Button>
+                        </Button>}
+                        {estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                            onPress={editarRegistro}>
+                            Salvar edição
+                        </Button>}
 
                     </View>
 
                     <View style={styles.container}>
+                        {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf: "center", width: '80%', height: 35, fontSize: 25, color: '#000000', padding: 10 }}>Salvo com sucesso!</Badge>}
+
                         <Text style={styles.textGroup}>Dados da matéria</Text>
                         <TextInput style={styles.campostexto}
                             mode="outlined"
@@ -171,8 +222,8 @@ const CadastroBlog = () => {
                         />
                         {possuiErro && <HelperText type="error">{errorURLMateria}</HelperText>}
 
-                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <Button onPress={() => handleImageSelect()} >Pick an image from camera roll</Button>
+                        <View style={{ flex: 1, alignSelf: 'flex-start', justifyContent: 'flex-start' }}>
+                            <Button icon={'camera'} onPress={() => handleImageSelect()} >Selecione uma imagem</Button>
                             {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
                         </View>
                     </View>
@@ -189,7 +240,7 @@ const CadastroBlog = () => {
                                         <DataTable.Cell>
                                             <>
                                                 <Button icon="pencil-outline" style={styles.buttom}
-                                                    onPress={() => editarRegistro(materia.id)}>
+                                                    onPress={() => preencherCamposEdicao(materia.id)}>
                                                 </Button>
                                                 <Button icon="trash-can-outline" style={styles.buttom}
                                                     onPress={() => excluirRegistro(materia.id)}>

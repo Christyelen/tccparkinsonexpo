@@ -48,7 +48,7 @@ const CadastroNives = () => {
 
     const addNivel = async () => {
         if (validarCampos()) {
-            const doc = await addDoc(collection(FIRESTORE_DB, 'nivel'), { titulo: tituloNivel, nivel: nivel });
+            const doc = await addDoc(collection(FIRESTORE_DB, 'nivel'), { label: tituloNivel, value: nivel });
             console.log('Passou')
             setNivel('');
         }

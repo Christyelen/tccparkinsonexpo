@@ -80,9 +80,9 @@ const Niveis = () => {
                                 <Button
                                     key={niveis.key}
                                     style={styles.buttom}
-                                    onPress={() => navigation.navigate("PreExercicio", { nivel: niveis.nivel, listaOfensiva: listaPreExercicio})}
+                                    onPress={() => navigation.navigate("PreExercicio", { nivel: niveis.value, listaOfensiva: listaPreExercicio})}
                                     mode="contained">
-                                    <Text>{niveis.titulo}</Text>
+                                    <Text>{niveis.label}</Text>
                                 </Button>))}
                         </View>
                     </View>

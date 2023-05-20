@@ -11,7 +11,12 @@ export const styles = StyleSheet.create({
         padding: 10,
         color: "#663399"
     },
+    textGroup: {
+        fontSize: 20,
+        margin: 8,
+        fontWeight: "bold"
 
+    },
     buttom: {
         marginTop: 8
     },

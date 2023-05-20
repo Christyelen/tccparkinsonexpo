@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, SafeAreaView, Platform, KeyboardAvoidingView } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { propsStack } from "../../routes/Stack/Models";
-import { TextInput, Button, Checkbox, HelperText } from 'react-native-paper';
+import { TextInput, Button, Checkbox, HelperText, Modal, Badge, Snackbar } from 'react-native-paper';
 import { styles } from "./styles";
 import { addDoc, collection, doc, getFirestore, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
 import { getAuth } from "firebase/auth";
-
+import validator from 'validator';
 
 const FichaAnamnese = (props) => {
     const navigation = useNavigation<propsStack>()
@@ -44,6 +44,7 @@ const FichaAnamnese = (props) => {
     const [nomeCuidador, setNomeCuidador] = useState('')
     const [cpfCuidador, setCpfCuidador] = useState('')
     const [idDocumento, setIdDocumento] = useState('');
+    const [mostrarAlerta, setMostrarAlerta] = useState(false);
 
     //Campos Obrigatórios:
 
@@ -105,6 +106,10 @@ const FichaAnamnese = (props) => {
             setErrorTelefone("Campo Telefone é obrigatório!");
             erros += 1;
         }
+        if (!validator.isEmail(email)) {
+            setErrorEmail('Por favor, insira um email válido.');
+            erros += 1;
+          }
         if (email == '') {
             setErrorEmail("Campo Email é obrigatório!");
             erros += 1;
@@ -260,8 +265,10 @@ const FichaAnamnese = (props) => {
             if (!isReadOnly) {
                 if (idDocumento != null) {
                     atualizarFicha(idDocumento);
+                    exibirAlerta();
                 } else {
                     addFicha();
+                    exibirAlerta();
                 }
             }
         }
@@ -272,6 +279,14 @@ const FichaAnamnese = (props) => {
             setarCamposReadOnly();
         }
     }
+
+    const exibirAlerta = () => {
+        setMostrarAlerta(true);
+        setTimeout(() => {
+            setMostrarAlerta(false);
+          }, 3000);
+    };
+
     const setarCamposReadOnly = () => {
         setReadOnly(!isReadOnly);
     };
@@ -298,10 +313,9 @@ const FichaAnamnese = (props) => {
                                 onPress={salvarCampos}>
                                 Editar
                             </Button>}
-
                         </View>
-
                         <View style={styles.container}>
+                           {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf:"center", width: '80%', height: 35, fontSize:25, color:'#000000', padding:10 }}>Salvo com sucesso!</Badge>}
                             <Text style={styles.textGroup}>Dados do Paciente</Text>
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
@@ -328,13 +342,13 @@ const FichaAnamnese = (props) => {
                                 keyboardType="numeric"
                                 onChangeText={(text: string) => {
                                     setCpf(text.replace(/\D/g, '')
-                                    .replace(/(\d{3})(\d)/, '$1.$2')
-                                    .replace(/(\d{3})(\d)/, '$1.$2')
-                                    .replace(/(\d{3})(\d{1,2})/, '$1-$2')
-                                    .replace(/(-\d{2})\d+?$/, '$1'))
+                                        .replace(/(\d{3})(\d)/, '$1.$2')
+                                        .replace(/(\d{3})(\d)/, '$1.$2')
+                                        .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+                                        .replace(/(-\d{2})\d+?$/, '$1'))
                                 }}
                                 value={cpf}
-                                
+
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
                             />
@@ -343,7 +357,7 @@ const FichaAnamnese = (props) => {
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
                                 label="RG"
-                                onChangeText={(text: string) => setRg(text.replace(/^(\d{1,2})(\d{3})(\d{3})([\dX])$/,'$1.$2.$3-$4'))}
+                                onChangeText={(text: string) => setRg(text.replace(/^(\d{1,2})(\d{3})(\d{3})([\dX])$/, '$1.$2.$3-$4'))}
                                 value={rg}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -385,7 +399,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="Altura"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setAltura(text.replace(/^(\d+(\.\d{1})?)m$/,"$1 m"))}
+                                onChangeText={(text: string) => setAltura(text.replace(/^(\d+(\.\d{1})?)m$/, "$1 m"))}
                                 value={altura}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -540,7 +554,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="CRM do médico"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setCrmMedico(text.replace(/^(\d{5})([A-Za-z]{2})$/,"$1/$2"))}
+                                onChangeText={(text: string) => setCrmMedico(text.replace(/^(\d{5})([A-Za-z]{2})$/, "$1/$2"))}
                                 value={crmMedico}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -578,6 +592,7 @@ const FichaAnamnese = (props) => {
 
                                     />}
                             </View>
+
                         </View>
                     </ScrollView>
                 </KeyboardAvoidingView>
