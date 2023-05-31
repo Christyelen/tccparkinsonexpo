@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
-import { Button, Checkbox, HelperText, TextInput } from "react-native-paper";
+import { Badge, Button, Checkbox, HelperText, TextInput } from "react-native-paper";
 import { styles } from "../Login/styles";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
@@ -22,6 +22,8 @@ const CriarUsuario = () => {
     const [cpf, setCpf] = useState('');
     const EMAIL_ADM = "christyelenkra@gmail.com";
     const auth = getAuth();
+    const [mostrarAlerta, setMostrarAlerta] = useState(false);
+
 
     //campos obrigatorios
 
@@ -50,6 +52,7 @@ const CriarUsuario = () => {
                 else {
                     addUsuario(user.uid, "");
                 }
+                exibirAlerta();
             }).catch(error => alert(error.message));
 
         }
@@ -68,10 +71,8 @@ const CriarUsuario = () => {
         setCoordenador(!isChecked);
     };
 
-
     const validarCampos = () => {
         let erros = 0
-        
         if (!validator.isEmail(emailValue)) {
             setErrorEmail('Por favor, insira um email válido.');
             erros += 1;
@@ -116,6 +117,13 @@ const CriarUsuario = () => {
         }
     }
 
+    const exibirAlerta = () => {
+        setMostrarAlerta(true);
+        setTimeout(() => {
+            setMostrarAlerta(false);
+        }, 3000);
+    };
+
     return (
         <>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
@@ -127,6 +135,8 @@ const CriarUsuario = () => {
                         </Button>
                     </View>
                     <View style={styles.container}>
+                    {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf: "center", width: '80%', height: 35, fontSize: 25, color: '#000000', padding: 10 }}>Salvo com sucesso!</Badge>}
+
                         <Text style={styles.textGroup}>Inscreva-se</Text>
                         <TextInput style={styles.campostexto}
                             mode="outlined"

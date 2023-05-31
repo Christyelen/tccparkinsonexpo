@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
-import { Button, Card, DataTable, HelperText, TextInput } from "react-native-paper";
+import { Badge, Button, Card, DataTable, HelperText, TextInput } from "react-native-paper";
 import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
 
@@ -12,14 +12,15 @@ const CadastroNives = () => {
     const [tituloNivel, setTituloNivel] = useState('')
     const [nivel, setNivel] = useState('')
     const [listaNiveis, setListaNiveis] = useState([]);
+    const [idDocumento, setIdDocumento] = useState('');
+    const [estaEditando, setEstaEditando] = useState(false);
+    const [mostrarAlerta, setMostrarAlerta] = useState(false);
 
     //Campos Obrigatórios:
 
     const [errorTitulo, setErrorTitulo] = useState('')
     const [errorNivel, setErrorNivel] = useState('')
     const [possuiErro, setPossuiErro] = useState(false);
-
-
 
     useEffect(() => {
         buscarNiveis();
@@ -49,32 +50,24 @@ const CadastroNives = () => {
     const addNivel = async () => {
         if (validarCampos()) {
             const doc = await addDoc(collection(FIRESTORE_DB, 'nivel'), { label: tituloNivel, value: nivel });
-            console.log('Passou')
+            limparCampos();
+            exibirAlerta();
             setNivel('');
         }
     }
 
-    const excluirRegistro = (idDocumento) => {
-        console.log("Excluir")
-        const documentRef = doc(FIRESTORE_DB, 'nivel', idDocumento);
-        // Remove o documento
-        deleteDoc(documentRef).then(() => {
-            console.log('Documento removido com sucesso!');
-        }).catch((error) => {
-            console.error('Erro ao remover o documento:', error);
-        });
-    }
-
-    const editarRegistro = async (idDocumento) => {
+    const editarRegistro = async () => {
         console.log("Editar")
         try {
             if (validarCampos()) {
 
                 const documentRef = doc(FIRESTORE_DB, 'nivel', idDocumento);
                 await updateDoc(documentRef, {
-                    titulo: tituloNivel,
-                    nivel: nivel
+                    label: tituloNivel,
+                    value: nivel
                 });
+                limparCampos();
+                exibirAlerta();
                 console.log('Documento atualizado com sucesso!');
             }
         } catch (error) {
@@ -109,6 +102,54 @@ const CadastroNives = () => {
         }
     }
 
+    const limparCampos = () => {
+        setTituloNivel('');
+        setNivel('');
+        setIdDocumento('');
+        setEstaEditando(false);
+    }
+
+    const excluirRegistro = (idDocumento) => {
+        Alert.alert(
+            'Excluir?',
+            'Deseja realmente excluir o registro?',
+            [
+                {
+                    text: 'Sim', onPress: () => {
+                        const documentRef = doc(FIRESTORE_DB, 'nivel', idDocumento);
+                        // Remove o documento
+                        deleteDoc(documentRef).then(() => {
+                            console.log('Documento removido com sucesso!');
+                        }).catch((error) => {
+                            console.error('Erro ao remover o documento:', error);
+                        });
+                    }
+                },
+                {
+                    text: 'Não', onPress: () => {
+                    }
+                }
+            ]
+        );
+
+    }
+
+    const preencherCamposEdicao = (idDocumento) => {
+        listaNiveis.filter((item) => item.id == idDocumento).map(nivel => {
+            setTituloNivel(nivel.label);
+            setNivel(nivel.value);
+        })
+        setEstaEditando(true);
+        setIdDocumento(idDocumento);
+    }
+
+    const exibirAlerta = () => {
+        setMostrarAlerta(true);
+        setTimeout(() => {
+            setMostrarAlerta(false);
+        }, 3000);
+    };
+
 
     return (
         <>
@@ -119,13 +160,19 @@ const CadastroNives = () => {
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                        {!estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
                             onPress={addNivel}>
                             Salvar
-                        </Button>
+                        </Button>}
+                        {estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                            onPress={editarRegistro}>
+                            Salvar edição
+                        </Button>}
                     </View>
 
                     <View style={styles.container}>
+                        {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf: "center", width: '80%', height: 35, fontSize: 25, color: '#000000', padding: 10 }}>Salvo com sucesso!</Badge>}
+
                         <Text style={styles.textGroup}>Dados do Paciente</Text>
                         <TextInput style={styles.campostexto}
                             mode="outlined"
@@ -157,7 +204,7 @@ const CadastroNives = () => {
                                         <DataTable.Cell>
                                             <>
                                                 <Button icon="pencil-outline" style={styles.buttom}
-                                                    onPress={() => editarRegistro(nivel.id)}>
+                                                    onPress={() => preencherCamposEdicao(nivel.id)}>
                                                 </Button>
                                                 <Button icon="trash-can-outline" style={styles.buttom}
                                                     onPress={() => excluirRegistro(nivel.id)}>

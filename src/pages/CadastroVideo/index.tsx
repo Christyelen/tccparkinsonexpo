@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, FlatList } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, FlatList, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { styles } from "./styles";
-import { Button, Card, DataTable, HelperText, List, TextInput } from "react-native-paper";
+import { Badge, Button, Card, DataTable, HelperText, List, TextInput } from "react-native-paper";
 import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
 import RNPickerSelect from "react-native-picker-select";
@@ -17,6 +17,9 @@ const CadastroVideo = () => {
     const [idVideo, setIdVideo] = useState('')
     const [nivel, setNivel] = useState('')
     const [listaExercicio, setListaExercicios] = useState([]);
+    const [idDocumento, setIdDocumento] = useState('');
+    const [estaEditando, setEstaEditando] = useState(false);
+    const [mostrarAlerta, setMostrarAlerta] = useState(false);
 
     //Campos Obrigatórios:
 
@@ -53,7 +56,6 @@ const CadastroVideo = () => {
         }
     };
 
-
     const validarCampos = () => {
         let erros = 0
         if (idVideo == '') {
@@ -74,16 +76,23 @@ const CadastroVideo = () => {
         }
         console.log(nivel)
 
-        let quantidadeVideosNivel = 0;
-        listaExercicio.map((item) => {
-            if (item.nivel == nivel) {
-                quantidadeVideosNivel = quantidadeVideosNivel + 1;
+        listaExercicio.filter((item) => item.id == idDocumento).map(exercicio => {
+
+            if (exercicio.nivel != nivel) {
+                let quantidadeVideosNivel = 0;
+                listaExercicio.map((item) => {
+                    if (item.nivel == nivel) {
+                        quantidadeVideosNivel = quantidadeVideosNivel + 1;
+                    }
+                });
+                if (quantidadeVideosNivel == 3) {
+                    setErrorNivel("Esse nivel já possui a quantidade máxima de videos permitida.");
+                    erros += 1;
+                }
             }
-        });
-        if (quantidadeVideosNivel == 3) {
-            setErrorNivel("Esse nivel já possui a quantidade máxima de videos permitida.");
-            erros += 1;
-        }
+        })
+
+
 
         if (erros > 0) {
             setPossuiErro(true);
@@ -117,17 +126,43 @@ const CadastroVideo = () => {
     };
 
     const excluirRegistro = (idDocumento) => {
-        console.log("Excluir")
-        const documentRef = doc(FIRESTORE_DB, 'exercicio', idDocumento);
-        // Remove o documento
-        deleteDoc(documentRef).then(() => {
-            console.log('Documento removido com sucesso!');
-        }).catch((error) => {
-            console.error('Erro ao remover o documento:', error);
-        });
+        Alert.alert(
+            'Excluir?',
+            'Deseja realmente excluir o registro?',
+            [
+                {
+                    text: 'Sim', onPress: () => {
+                        const documentRef = doc(FIRESTORE_DB, 'exercicio', idDocumento);
+
+                        deleteDoc(documentRef).then(() => {
+                            console.log('Documento removido com sucesso!');
+                        }).catch((error) => {
+                            console.error('Erro ao remover o documento:', error);
+                        });
+
+                    }
+                },
+                {
+                    text: 'Não', onPress: () => {
+                    }
+                }
+            ]
+        );
+
     }
 
-    const editarRegistro = async (idDocumento) => {
+    const preencherCamposEdicao = (idDocumento) => {
+        listaExercicio.filter((item) => item.id == idDocumento).map(exercicio => {
+            setIdVideo(exercicio.idVideo);
+            setTituloExercicio(exercicio.tituloExercicio);
+            setDescricaoExercicio(exercicio.descricaoExercicio);
+            setNivel(exercicio.nivel);
+        })
+        setEstaEditando(true);
+        setIdDocumento(idDocumento);
+    }
+
+    const editarRegistro = async () => {
         console.log("Editar")
         try {
             if (validarCampos()) {
@@ -138,6 +173,8 @@ const CadastroVideo = () => {
                     descricaoExercicio: descricaoExercicio,
                     nivel: nivel
                 });
+                limparCampos();
+                exibirAlerta();
                 console.log('Documento atualizado com sucesso!');
             }
         } catch (error) {
@@ -149,6 +186,8 @@ const CadastroVideo = () => {
         if (validarCampos()) {
             const doc = addDoc(collection(FIRESTORE_DB, 'exercicio'), { idVideo: idVideo, tituloExercicio: tituloExercicio, descricaoExercicio: descricaoExercicio, nivel: nivel });
             console.log('Passou')
+            limparCampos();
+            exibirAlerta();
             setExercicio('');
         }
     }
@@ -161,6 +200,22 @@ const CadastroVideo = () => {
         },
     };
 
+    const exibirAlerta = () => {
+        setMostrarAlerta(true);
+        setTimeout(() => {
+            setMostrarAlerta(false);
+        }, 3000);
+    };
+
+    const limparCampos = () => {
+        setIdVideo('');
+        setTituloExercicio('');
+        setDescricaoExercicio('');
+        setNivel('');
+        setIdDocumento('');
+        setEstaEditando(false);
+    }
+
     return (
         <>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
@@ -170,16 +225,19 @@ const CadastroVideo = () => {
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button
-                            mode="contained"
-                            icon={'content-save-outline'}
-                            style={styles.buttom}
+                        {!estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
                             onPress={addExercicio}>
-                            <Text>Salvar</Text>
-                        </Button>
+                            Salvar
+                        </Button>}
+                        {estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                            onPress={editarRegistro}>
+                            Salvar edição
+                        </Button>}
 
                     </View>
                     <View style={styles.container}>
+                        {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf: "center", width: '80%', height: 35, fontSize: 25, color: '#000000', padding: 10 }}>Salvo com sucesso!</Badge>}
+
                         <Text style={styles.textGroup}>Cadastrar novos vídeos</Text>
 
                         <TextInput style={styles.campostexto}
@@ -244,7 +302,7 @@ const CadastroVideo = () => {
                                         <DataTable.Cell>
                                             <>
                                                 <Button icon="pencil-outline" style={styles.buttom}
-                                                    onPress={() => editarRegistro(exercicio.id)}>
+                                                    onPress={() => preencherCamposEdicao(exercicio.id)}>
                                                 </Button>
                                                 <Button icon="trash-can-outline" style={styles.buttom}
                                                     onPress={() => excluirRegistro(exercicio.id)}>

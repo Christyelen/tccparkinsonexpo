@@ -26,11 +26,11 @@ const Ofensiva = (props) => {
 
     useEffect(() => {
         ordenarListaDatas()
-    }, []);
+    }, [listaOfensivas]);
 
     useEffect(() => {
         calcularDiasDeOfensiva()
-    }, []);
+    }, [listaOfensivas]);
 
 
     const buscarOfensivas = async () => {
@@ -72,27 +72,29 @@ const Ofensiva = (props) => {
 
             return 0;
         });
-        console.log("cima "+listaOfensivasData);
-
         setlistaOfensivasData(listaOfensivasData);
     }
 
     const calcularDiasDeOfensiva = async () => {
-
+        console.log("entrou calcular dias")
+        let diaAtualContado = false;
         let contadorDiasConsecutivos = 0;
         let ultimoDocumentoData = moment(moment().format('YYYY-MM-DD'), 'YYYY-MM-DD');
-        console.log(listaOfensivasData);
+
         for (let index = 0; index < listaOfensivasData.length; index++) {
             const dataOfensiva = moment(listaOfensivasData[index], 'YYYY-MM-DD');
+
             if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 1) {
                 contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
                 ultimoDocumentoData = dataOfensiva;
-                console.log("lista ofensiva dentro if" + ultimoDocumentoData);
-
+                diaAtualContado = false;
+                continue;
             }
-            else if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 0 && !diaAtualContado) {
+
+            if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 0 && !diaAtualContado) {
                 contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
-                setDiaAtualContado(true)
+                console.log(!diaAtualContado)
+                diaAtualContado = true;
             }
         }
         setDiasOfensiva(contadorDiasConsecutivos);

@@ -357,7 +357,7 @@ const FichaAnamnese = (props) => {
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
                                 label="RG"
-                                onChangeText={(text: string) => setRg(text.replace(/^(\d{1,2})(\d{3})(\d{3})([\dX])$/, '$1.$2.$3-$4'))}
+                                onChangeText={(text: string) => setRg(text)}
                                 value={rg}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -369,7 +369,7 @@ const FichaAnamnese = (props) => {
                                 keyboardType="numeric"
                                 placeholder="dia/ mês/ ano"
                                 label="Data de Nascimento"
-                                onChangeText={(text: string) => setDataNascimento(text.replace(/^(\d{2})(\d{2})(\d{4})$/, "$1/$2/$3"))}
+                                onChangeText={(text: string) => setDataNascimento(text)}
                                 value={dataNascimento}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -390,7 +390,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="Peso"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setPeso(text.replace(/^(\d+(\.\d{1,2})?)kg$/, "$1 kg"))}
+                                onChangeText={(text: string) => setPeso(text)}
                                 value={peso}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -399,7 +399,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="Altura"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setAltura(text.replace(/^(\d+(\.\d{1})?)m$/, "$1 m"))}
+                                onChangeText={(text: string) => setAltura(text)}
                                 value={altura}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -408,7 +408,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="Telefone"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setTelefone(text.replace(/(\d{2})\s(\d{2})\s(\d{5})-(\d{4})/, "($1) $2 $3-$4"))}
+                                onChangeText={(text: string) => setTelefone(text)}
                                 value={telefone}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -446,7 +446,7 @@ const FichaAnamnese = (props) => {
                                     mode="outlined"
                                     label="Cartão Nacional da Saúde"
                                     keyboardType="numeric"
-                                    onChangeText={(text: string) => setCartaoPlano(text.replace(/^(\d{4})(\d{4})(\d{4})(\d{4})$/, "$1 $2 $3 $4"))}
+                                    onChangeText={(text: string) => setCartaoPlano(text)}
                                     value={cartaoPlano}
                                     editable={!isReadOnly}
                                     theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -477,7 +477,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="CEP"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setCep(text.replace(/^(\d{5})(\d{3})$/, "$1-$2"))}
+                                onChangeText={(text: string) => setCep(text)}
                                 value={cep}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
@@ -554,7 +554,7 @@ const FichaAnamnese = (props) => {
                                 mode="outlined"
                                 label="CRM do médico"
                                 keyboardType="numeric"
-                                onChangeText={(text: string) => setCrmMedico(text.replace(/^(\d{5})([A-Za-z]{2})$/, "$1/$2"))}
+                                onChangeText={(text: string) => setCrmMedico(text)}
                                 value={crmMedico}
                                 editable={!isReadOnly}
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}

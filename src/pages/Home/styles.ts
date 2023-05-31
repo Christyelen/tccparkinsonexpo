@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     },
     containerBotoes: {
         flexDirection: "row",
-        justifyContent:"flex-end",
+        justifyContent:"space-between",
         marginLeft: 20,
         marginRight:20
     },

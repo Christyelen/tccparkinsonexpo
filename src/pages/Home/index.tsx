@@ -20,9 +20,20 @@ const Home = () => {
         buscarUsuario();
     }, []);
 
-    useEffect(() =>{
+    useEffect(() => {
         validarPossuiRegraCoordenador(listaUsuario)
     })
+
+    const logout = () => {
+        auth.signOut()
+          .then(() => {
+            navigation.navigate("Login");
+          })
+          .catch(error => {
+            // Ocorreu um erro durante o logout
+            console.log(error);
+          });
+      }
 
     const buscarFichaAnamnese = () => {
         try {
@@ -73,7 +84,7 @@ const Home = () => {
         console.log(auth.currentUser.uid)
 
         for (let index = 0; index < usuario.length; index++) {
-            if (auth.currentUser.uid == usuario[index].usuario){
+            if (auth.currentUser.uid == usuario[index].usuario) {
                 setusuarioPossuiPermissao(usuario[index].coordenador);
                 console.log(usuario[index].coordenador)
             }
@@ -85,6 +96,10 @@ const Home = () => {
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
+                        <Button icon="logout" mode="outlined" style={styles.buttomAdm}
+                            onPress={() => logout()}>
+                            Sair
+                        </Button>
                         {usuarioPossuiPermissao && <Button icon="security" mode="outlined" style={styles.buttomAdm}
                             onPress={() => navigation.navigate("CadastroAdm")}>
                             Area do administrador
