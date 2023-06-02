@@ -10,9 +10,14 @@ export const styles = StyleSheet.create({
         flexDirection: "column",
     },
     buttom: {
-        marginTop: 8
+        marginTop: 8,
+        backgroundColor: "#54abf7"
     },
-    appBar:{
+    buttomAdm: {
+        marginTop: 8,
+        borderColor: "#54abf7"
+    },
+    appBar: {
         backgroundColor: '#f0dbff',
     },
     scroll: {
@@ -29,11 +34,11 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         color: "#663399"
-      },
+    },
     containerBotoes: {
         flexDirection: "row",
-        justifyContent:"space-between",
+        justifyContent: "space-between",
         marginLeft: 20,
-        marginRight:20
+        marginRight: 20
     },
 });

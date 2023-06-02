@@ -76,7 +76,7 @@ const CriarUsuario = () => {
         if (!validator.isEmail(emailValue)) {
             setErrorEmail('Por favor, insira um email válido.');
             erros += 1;
-          }
+        }
         if (emailValue == '') {
             setErrorEmail("Campo Email é obrigatório!");
             erros += 1;
@@ -126,22 +126,23 @@ const CriarUsuario = () => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop: 40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttonCabecalho}
+                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttonCabecalho}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
                     </View>
                     <View style={styles.container}>
-                    {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf: "center", width: '80%', height: 35, fontSize: 25, color: '#000000', padding: 10 }}>Salvo com sucesso!</Badge>}
+                        {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf: "center", width: '80%', height: 35, fontSize: 25, color: '#000000', padding: 10 }}>Salvo com sucesso!</Badge>}
 
                         <Text style={styles.textGroup}>Inscreva-se</Text>
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Email"
                             keyboardType="email-address"
+                            activeOutlineColor="#54abf7"
                             value={emailValue}
                             onChangeText={(text: string) => setEmail(text)}
                         />
@@ -150,6 +151,7 @@ const CriarUsuario = () => {
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Senha"
+                            activeOutlineColor="#54abf7"
                             value={password}
                             onChangeText={(text: string) => setPassword(text)}
                             secureTextEntry={!showPassword}
@@ -160,6 +162,7 @@ const CriarUsuario = () => {
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Confirmar Senha"
+                            activeOutlineColor="#54abf7"
                             value={confirmPassword}
                             onChangeText={(text: string) => setConfirmPassword(text)}
                             secureTextEntry={!showPassword}
@@ -170,13 +173,16 @@ const CriarUsuario = () => {
                         <View style={{ flexDirection: "row", flex: 1, alignSelf: "flex-start", marginTop: 10 }}>
                             <Checkbox.Android
                                 status={isChecked ? 'checked' : 'unchecked'}
-                                onPress={handleCheckboxChange} />
+                                onPress={handleCheckboxChange} 
+                                uncheckedColor="#54abf7"
+                                color="#54abf7"  />
                             <Text style={{ alignSelf: "center" }}>Perfil de coordenador?</Text>
                         </View>
                         <View style={{ flexDirection: "row", flex: 1 }}>
                             {isChecked &&
                                 <TextInput style={styles.campostexto}
                                     mode="outlined"
+                                    activeOutlineColor="#54abf7"
                                     label="CPF"
                                     keyboardType="numeric"
                                     onChangeText={(text: string) => {

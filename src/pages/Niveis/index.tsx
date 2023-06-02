@@ -65,10 +65,10 @@ const Niveis = () => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop:20, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttomCabecalho}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
@@ -79,6 +79,7 @@ const Niveis = () => {
                             {listaNiveis.map(niveis => (
                                 <Button
                                     key={niveis.key}
+                                    id={niveis.key}
                                     style={styles.buttom}
                                     onPress={() => navigation.navigate("PreExercicio", { nivel: niveis.value, listaOfensiva: listaPreExercicio})}
                                     mode="contained">

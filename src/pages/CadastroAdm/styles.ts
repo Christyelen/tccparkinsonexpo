@@ -11,24 +11,22 @@ export const styles = StyleSheet.create({
     buttom: {
         marginTop: 50,
         height: 60,
-        width: '100%'
-    },
-    appBar: {
-        backgroundColor: '#f0dbff',
+        width: '100%',
+        backgroundColor:"#54abf7"
     },
     scroll: {
         flex: 1,
     },
     textButton: {
         fontSize: 30,
-        padding: 15,
+        paddingTop: 15,
         width: '100%'
     },
     textGroup: {
         fontSize: 20,
         margin: 8,
         fontWeight: "bold",
-        color: '#663399'
+        color: '#54abf7'
     },
     containerBotoes: {
         flexDirection: "row",
@@ -41,6 +39,7 @@ export const styles = StyleSheet.create({
         marginTop: 5,
     },
     buttonCabecalho:{
-        marginTop: 8
+        marginTop: 8,
+        borderColor:"#54abf7"
     }
 })

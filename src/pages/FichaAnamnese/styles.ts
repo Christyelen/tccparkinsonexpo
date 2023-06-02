@@ -24,14 +24,13 @@ export const styles = StyleSheet.create({
     textGroup: {
         fontSize: 20,
         margin: 8,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color:"#54abf7"
 
     },
     buttom: {
-        marginTop: 8
-    },
-    appBar: {
-        backgroundColor: '#f0dbff',
+        marginTop: 8,
+        borderColor:"#54abf7"
     },
     readOnly: {
         backgroundColor: '#F2F2F2'

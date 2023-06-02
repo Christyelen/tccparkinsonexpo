@@ -6,7 +6,7 @@ import { styles } from "./styles";
 import { Badge, Button, Card, DataTable, HelperText, List, TextInput } from "react-native-paper";
 import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
-import RNPickerSelect from "react-native-picker-select";
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const CadastroVideo = () => {
     const navigation = useNavigation<propsStack>()
@@ -20,6 +20,8 @@ const CadastroVideo = () => {
     const [idDocumento, setIdDocumento] = useState('');
     const [estaEditando, setEstaEditando] = useState(false);
     const [mostrarAlerta, setMostrarAlerta] = useState(false);
+    var nivelValue = "";
+
 
     //Campos Obrigatórios:
 
@@ -47,6 +49,7 @@ const CadastroVideo = () => {
                             ...doc.data()
                         })
                     });
+                    console.log(JSON.stringify(niveis))
                     setListaNiveis(niveis)
                 }
             });
@@ -70,18 +73,26 @@ const CadastroVideo = () => {
             setErrorDescricao("Campo Descrição é obrigatório!");
             erros += 1;
         }
+        console.log("aqui " + nivel);
         if (nivel == null) {
             setErrorNivel("Campo Nivel é obrigatório!");
             erros += 1;
         }
-        console.log(nivel)
+        else {
+            for (let index = 0; index < listaNiveis.length; index++) {
+                if (listaNiveis[index].label == nivel) {
+                    nivelValue = listaNiveis[index].value;
+                    console.log("nivel tesste: " + nivelValue)
+                }
+            }
+        }
 
         listaExercicio.filter((item) => item.id == idDocumento).map(exercicio => {
 
-            if (exercicio.nivel != nivel) {
+            if (exercicio.nivel != nivelValue) {
                 let quantidadeVideosNivel = 0;
                 listaExercicio.map((item) => {
-                    if (item.nivel == nivel) {
+                    if (item.nivel == nivelValue) {
                         quantidadeVideosNivel = quantidadeVideosNivel + 1;
                     }
                 });
@@ -91,8 +102,6 @@ const CadastroVideo = () => {
                 }
             }
         })
-
-
 
         if (erros > 0) {
             setPossuiErro(true);
@@ -184,21 +193,13 @@ const CadastroVideo = () => {
 
     const addExercicio = () => {
         if (validarCampos()) {
-            const doc = addDoc(collection(FIRESTORE_DB, 'exercicio'), { idVideo: idVideo, tituloExercicio: tituloExercicio, descricaoExercicio: descricaoExercicio, nivel: nivel });
-            console.log('Passou')
+            console.log('Passou ' + nivelValue)
+            const doc = addDoc(collection(FIRESTORE_DB, 'exercicio'), { idVideo: idVideo, tituloExercicio: tituloExercicio, descricaoExercicio: descricaoExercicio, nivel: nivelValue });
             limparCampos();
             exibirAlerta();
             setExercicio('');
         }
     }
-    const pickerStyle = {
-        inputIOSContainer: {
-            padding: 15,
-        },
-        inputAndroidContainer: {
-            padding: 15,
-        },
-    };
 
     const exibirAlerta = () => {
         setMostrarAlerta(true);
@@ -212,24 +213,29 @@ const CadastroVideo = () => {
         setTituloExercicio('');
         setDescricaoExercicio('');
         setNivel('');
+        nivelValue = '';
         setIdDocumento('');
         setEstaEditando(false);
     }
 
+    const selecionarNivel = (index, value) => {
+        setNivel(value);
+    }
+
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop: 40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttom}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        {!estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                        {!estaEditando && <Button icon="content-save-outline" buttonColor="#54abf7" mode="contained" style={styles.buttom}
                             onPress={addExercicio}>
                             Salvar
                         </Button>}
-                        {estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                        {estaEditando && <Button icon="content-save-outline" buttonColor="#54abf7" mode="contained" style={styles.buttom}
                             onPress={editarRegistro}>
                             Salvar edição
                         </Button>}
@@ -242,7 +248,8 @@ const CadastroVideo = () => {
 
                         <TextInput style={styles.campostexto}
                             mode="outlined"
-                            label="ID vídeo"
+                            label="ID vídeo" 
+                            activeOutlineColor="#54abf7"
                             onChangeText={(text: string) => setIdVideo(text)}
                             value={idVideo}
                         />
@@ -251,6 +258,7 @@ const CadastroVideo = () => {
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Titulo do Exercício"
+                            activeOutlineColor="#54abf7"
                             onChangeText={(text: string) => setTituloExercicio(text)}
                             value={tituloExercicio}
                         />
@@ -258,6 +266,7 @@ const CadastroVideo = () => {
 
                         <TextInput style={styles.campostexto}
                             mode="outlined"
+                            activeOutlineColor="#54abf7"
                             label="Descrição do Exercício"
                             multiline
                             numberOfLines={4}
@@ -265,27 +274,17 @@ const CadastroVideo = () => {
                             value={descricaoExercicio}
                         />
                         {possuiErro && <HelperText type="error">{errorDescricao}</HelperText>}
-                        <View style={{
-                            flex: 1,
-                            backgroundColor: "#fff",
-                            alignItems: "center",
-                            width: '100%',
-                            height: 45,
-                            borderRadius: 3,
-                            borderStyle: "solid",
-                            borderWidth: 1,
-                            borderColor: "#808080",
-                            marginTop: 15,
-                            justifyContent: "center",
-                        }}>
-                            <RNPickerSelect
-                                placeholder={{ label: 'Selecione um nivel', value: null }}
-                                value={nivel}
-                                style={pickerStyle}
-                                onValueChange={(itemValue) => setNivel(itemValue)}
-                                items={listaNiveis}
-                            />
-                        </View>
+
+                        <ModalDropdown
+                            options={listaNiveis.map(nivel => nivel.label)}
+                            defaultValue="Selecione um nível"
+                            onSelect={selecionarNivel}
+                            style={styles.dropdown}
+                            textStyle={styles.dropdownText}
+                            dropdownStyle={styles.dropdownContainer}
+                            dropdownTextStyle={styles.dropdownOptionText}
+                            dropdownTextHighlightStyle={styles.dropdownOptionHighlight}
+                        />
                         {possuiErro && <HelperText type="error">{errorNivel}</HelperText>}
 
                     </View>
@@ -301,10 +300,10 @@ const CadastroVideo = () => {
                                         <DataTable.Cell>{exercicio.id}</DataTable.Cell>
                                         <DataTable.Cell>
                                             <>
-                                                <Button icon="pencil-outline" style={styles.buttom}
+                                                <Button icon="pencil-outline" textColor="#54abf7" style={styles.buttom}
                                                     onPress={() => preencherCamposEdicao(exercicio.id)}>
                                                 </Button>
-                                                <Button icon="trash-can-outline" style={styles.buttom}
+                                                <Button icon="trash-can-outline" textColor="#54abf7" style={styles.buttom}
                                                     onPress={() => excluirRegistro(exercicio.id)}>
                                                 </Button>
                                             </>

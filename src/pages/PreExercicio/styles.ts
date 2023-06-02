@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
         position: 'relative',
         borderRadius: 10,
         padding: 10,
-        color: "#663399"
+        color: "#54abf7"
     },
     textGroup: {
         fontSize: 20,
@@ -18,10 +18,8 @@ export const styles = StyleSheet.create({
 
     },
     buttom: {
-        marginTop: 8
-    },
-    appBar: {
-        backgroundColor: '#f0dbff',
+        marginTop: 8,
+        borderColor:'#54abf7',
     },
     containerBotoes: {
         flexDirection: "row",
@@ -32,6 +30,7 @@ export const styles = StyleSheet.create({
     title: {
         fontSize: 30,
         fontWeight: 'bold',
+        color:"#54abf7"
     },
     description: {
         fontSize: 20,

@@ -54,10 +54,10 @@ const CadastroAdm = () => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop:40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttonCabecalho}
+                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttonCabecalho}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
@@ -69,7 +69,7 @@ const CadastroAdm = () => {
                             style={styles.buttom}
                             labelStyle={styles.textButton}
                             onPress={() => navigation.navigate("CadastroVideo")}>
-                            <Text>Cadastrar novos videos</Text>
+                            <Text>Cadastrar novos vídeos</Text>
                         </Button>
 
                         <Button
@@ -77,7 +77,7 @@ const CadastroAdm = () => {
                             style={styles.buttom}
                             labelStyle={styles.textButton}
                             onPress={() => navigation.navigate("CadastroNiveis")}>
-                            <Text>Cadastrar novos niveis</Text>
+                            <Text>Cadastrar novos níveis</Text>
                         </Button>
 
                         <Button
@@ -85,7 +85,7 @@ const CadastroAdm = () => {
                             style={styles.buttom}
                             labelStyle={styles.textButton}
                             onPress={() => navigation.navigate("CadastroBlog")}>
-                            <Text>Cadastrar registros Blog</Text>
+                            <Text>Cadastrar nova Matéria</Text>
                         </Button>
 
                         {isAdmPrincipal && <Button

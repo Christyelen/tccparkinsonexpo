@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
-import { Button, HelperText, TextInput } from "react-native-paper";
+import { ActivityIndicator, Badge, Button, HelperText, TextInput } from "react-native-paper";
 import { styles } from "../Login/styles";
 import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, ActionCodeSettings } from "firebase/auth";
 import validator from 'validator';
@@ -13,7 +13,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const auth = getAuth();
-
+    var carregamento = false;
 
     //campos obrigatorios
 
@@ -28,21 +28,24 @@ const Login = () => {
             }
         })
         return unsubscribe;
-    }, [])
-
+    }, []);
 
     const resetPassword = () => {
-        console.log('E-mail de redefinição de senha enviado com sucesso.');
-
-        sendPasswordResetEmail(auth, email)
-            .then(() => {
-                console.log('E-mail de redefinição de senha enviado com sucesso.');
-                // Você pode exibir uma mensagem de sucesso ou redirecionar o usuário para outra tela.
-            })
-            .catch((error) => {
-                console.log('Erro ao enviar o e-mail de redefinição de senha:', error);
-                // Trate o erro de acordo com sua lógica de usuário.
-            });
+        if (email == '') {
+            setErrorEmail('Adicione um email para recuperar a senha!');
+            setPossuiErro(true);
+        }
+        else {
+            console.log('E-mail de redefinição de senha enviado com sucesso.');
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    console.log('E-mail de redefinição de senha enviado com sucesso.');
+                    exibirAlerta();
+                })
+                .catch((error) => {
+                    console.log('Erro ao enviar o e-mail de redefinição de senha:', error);
+                });
+        }
     };
 
     const signIn = () => {
@@ -87,9 +90,15 @@ const Login = () => {
         setShowPassword(!showPassword);
     };
 
+    const exibirAlerta = () => {
+        setTimeout(() => {
+            Alert.alert("Email enviado com sucesso!");
+        }, 3000);
+    };
+
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop: 40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.container}>
                         <Text style={styles.textGroup}>Entre ou inscreva-se</Text>
@@ -97,6 +106,7 @@ const Login = () => {
                             mode="outlined"
                             label="Email"
                             value={email}
+                            activeOutlineColor="#54abf7"
                             onChangeText={(text: string) => setEmail(text)}
                         />
                         {possuiErro && <HelperText type="error">{errorEmail}</HelperText>}
@@ -105,6 +115,7 @@ const Login = () => {
                             mode="outlined"
                             label="Senha"
                             value={password}
+                            activeOutlineColor="#54abf7"
                             onChangeText={(text: string) => setPassword(text)}
                             secureTextEntry={!showPassword}
                             right={<TextInput.Icon icon="eye" onPress={toggleShowPassword} />}
@@ -115,7 +126,7 @@ const Login = () => {
 
                             <Text style={{ marginRight: 5 }}>Esqueceu sua senha?</Text>
                             <TouchableOpacity onPress={resetPassword}>
-                                <Text style={{ color: '#663399' }}>Clique aqui!</Text>
+                                <Text style={{ color: '#54abf7' }}>Clique aqui!</Text>
                             </TouchableOpacity>
                         </View>
                         <Button

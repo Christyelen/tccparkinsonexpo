@@ -11,17 +11,18 @@ export const styles = StyleSheet.create({
     buttom: {
         marginTop: 50,
         height: 60,
-        width: '100%'
+        width: '100%',
     },
     buttonCabecalho:{
-        marginTop: 8
+        marginTop: 8,
+        borderColor:"#54abf7"
     },
     scroll: {
         flex: 1,
     },
     textButton: {
         fontSize: 30,
-        padding: 15,
+        paddingTop: 15,
         width: '100%'
     },
     textGroup: {

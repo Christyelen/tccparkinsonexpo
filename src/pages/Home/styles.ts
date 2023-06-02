@@ -9,26 +9,29 @@ export const styles = StyleSheet.create({
         alignItems:"center"
     },
     buttom: {
-        marginTop: 50,
+        marginTop: 40,
+        backgroundColor: '#54abf7',
         height: 60,
         width: '100%'
-    },
-    appBar: {
-        backgroundColor: '#f0dbff',
     },
     scroll: {
         flex: 1,
     },
     textButton: {
         fontSize: 30,
-        padding: 15,
+        paddingTop: 15,
         width: '100%'
+    },
+    textGroupLegenda:{
+        fontSize: 20,
+        margin: 8,
+        fontWeight: "bold",
+        color: '#54abf7'
     },
     textGroup: {
         fontSize: 20,
         margin: 8,
         fontWeight: "bold",
-        color: '#663399'
     },
     containerBotoes: {
         flexDirection: "row",
@@ -37,6 +40,7 @@ export const styles = StyleSheet.create({
         marginRight:20
     },
     buttomAdm: {
-        marginTop: 8
+        marginTop: 8,
+        borderColor:'#54abf7',
     },
 })

@@ -17,8 +17,8 @@ const PreExercicio = (props) => {
         filtrarExercicios(props.route.params.nivel, props.route.params.listaOfensiva);
         definirVideosNivel();
     }, []);
-    
-    const definirVideosNivel = () =>{
+
+    const definirVideosNivel = () => {
         for (let index = 0; index < listaPreExercicioFiltrada.length; index++) {
             const preExercicio = listaPreExercicioFiltrada[index];
             videos.push(preExercicio.idVideo);
@@ -41,10 +41,10 @@ const PreExercicio = (props) => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop: 40, backgroundColor: '#ebf6fa', }}>
                 <View >
                     <View style={styles.containerBotoes}>
-                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttom}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
@@ -52,23 +52,24 @@ const PreExercicio = (props) => {
                         <Button style={styles.buttom}
                             mode="contained"
                             icon="run"
-                            onPress={() => { navigation.navigate("Exercicio", { idVideo1: videos[0] ? videos[0]: null, idVideo2: videos[1] ? videos[1]: null, idVideo03: videos[2] ? videos[2]: null }) }}>
+                            buttonColor="#54abf7"
+                            onPress={() => { navigation.navigate("Exercicio", { idVideo1: videos[0] ? videos[0] : null, idVideo2: videos[1] ? videos[1] : null, idVideo03: videos[2] ? videos[2] : null }) }}>
                             <Text>Iniciar Exercicio</Text>
                         </Button>
                     </View>
                     <View style={styles.container}>
-                    {!listaReady && <ActivityIndicator style={styles.loadingContainer} />}
-                            <FlatList
-                                data={listaPreExercicioFiltrada}
-                                renderItem={({ item }) => {
-                                    return (<List.Item titleStyle={styles.title}
-                                        descriptionStyle={styles.description}
-                                        key={item.id}
-                                        title={item.tituloExercicio}
-                                        description={item.descricaoExercicio}
-                                        titleNumberOfLines={3} />)
-                                }}
-                            />
+                        {!listaReady && <ActivityIndicator style={styles.loadingContainer} />}
+                        <FlatList
+                            data={listaPreExercicioFiltrada}
+                            renderItem={({ item }) => {
+                                return (<List.Item titleStyle={styles.title}
+                                    descriptionStyle={styles.description}
+                                    id={item.id}
+                                    title={item.tituloExercicio}
+                                    description={item.descricaoExercicio}
+                                    titleNumberOfLines={3} />)
+                            }}
+                        />
                     </View>
                 </View>
             </SafeAreaView>

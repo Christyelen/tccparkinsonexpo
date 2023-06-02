@@ -109,7 +109,7 @@ const FichaAnamnese = (props) => {
         if (!validator.isEmail(email)) {
             setErrorEmail('Por favor, insira um email válido.');
             erros += 1;
-          }
+        }
         if (email == '') {
             setErrorEmail("Campo Email é obrigatório!");
             erros += 1;
@@ -284,7 +284,7 @@ const FichaAnamnese = (props) => {
         setMostrarAlerta(true);
         setTimeout(() => {
             setMostrarAlerta(false);
-          }, 3000);
+        }, 3000);
     };
 
     const setarCamposReadOnly = () => {
@@ -293,32 +293,33 @@ const FichaAnamnese = (props) => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop: 40, backgroundColor: '#ebf6fa', }}>
                 <KeyboardAvoidingView
                     style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : "height"}
                 >
                     <ScrollView style={styles.scroll}>
                         <View style={styles.containerBotoes}>
-                            <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                            <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttom}
                                 onPress={() => navigation.goBack()}>
                                 Voltar
                             </Button>
-                            {!isReadOnly && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                            {!isReadOnly && <Button icon="content-save-outline" mode="contained" buttonColor="#54abf7" style={styles.buttom}
                                 onPress={salvarCampos}>
                                 Salvar
                             </Button>}
 
-                            {isReadOnly && <Button icon="pencil-outline" mode="contained" style={styles.buttom}
+                            {isReadOnly && <Button icon="pencil-outline" mode="contained" buttonColor="#54abf7" style={styles.buttom}
                                 onPress={salvarCampos}>
                                 Editar
                             </Button>}
                         </View>
                         <View style={styles.container}>
-                           {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf:"center", width: '80%', height: 35, fontSize:25, color:'#000000', padding:10 }}>Salvo com sucesso!</Badge>}
+                            {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf: "center", width: '80%', height: 35, fontSize: 25, color: '#000000', padding: 10 }}>Salvo com sucesso!</Badge>}
                             <Text style={styles.textGroup}>Dados do Paciente</Text>
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
+                                activeOutlineColor="#54abf7"
                                 label="Nome"
                                 onChangeText={(text: string) => setNome(text)}
                                 value={nome}
@@ -327,6 +328,7 @@ const FichaAnamnese = (props) => {
                             />
                             {possuiErro && <HelperText type="error">{errorNome}</HelperText>}
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="Sobrenome"
                                 onChangeText={(text: string) => setSobrenome(text)}
@@ -337,6 +339,7 @@ const FichaAnamnese = (props) => {
                             {possuiErro && <HelperText type="error">{errorSobrenome}</HelperText>}
 
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="CPF"
                                 keyboardType="numeric"
@@ -356,6 +359,7 @@ const FichaAnamnese = (props) => {
 
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
+                                activeOutlineColor="#54abf7"
                                 label="RG"
                                 onChangeText={(text: string) => setRg(text)}
                                 value={rg}
@@ -365,6 +369,7 @@ const FichaAnamnese = (props) => {
                             {possuiErro && <HelperText type="error">{errorRg}</HelperText>}
 
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 keyboardType="numeric"
                                 placeholder="dia/ mês/ ano"
@@ -377,6 +382,7 @@ const FichaAnamnese = (props) => {
                             {possuiErro && <HelperText type="error">{errorDataNascimento}</HelperText>}
 
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="Sexo"
                                 onChangeText={(text: string) => setSexo(text)}
@@ -388,6 +394,7 @@ const FichaAnamnese = (props) => {
 
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
+                                activeOutlineColor="#54abf7"
                                 label="Peso"
                                 keyboardType="numeric"
                                 onChangeText={(text: string) => setPeso(text)}
@@ -396,6 +403,7 @@ const FichaAnamnese = (props) => {
                                 theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
                             />
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="Altura"
                                 keyboardType="numeric"
@@ -406,6 +414,7 @@ const FichaAnamnese = (props) => {
                             />
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
+                                activeOutlineColor="#54abf7"
                                 label="Telefone"
                                 keyboardType="numeric"
                                 onChangeText={(text: string) => setTelefone(text)}
@@ -416,6 +425,7 @@ const FichaAnamnese = (props) => {
                             {possuiErro && <HelperText type="error">{errorTelefone}</HelperText>}
 
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="Email"
                                 keyboardType="email-address"
@@ -427,6 +437,7 @@ const FichaAnamnese = (props) => {
                             {possuiErro && <HelperText type="error">{errorEmail}</HelperText>}
 
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="Ano que foi diagnosticado"
                                 keyboardType="numeric"
@@ -437,12 +448,15 @@ const FichaAnamnese = (props) => {
                             />
                             <View style={{ flexDirection: "row" }}>
                                 <Checkbox.Android
+                                    uncheckedColor="#54abf7"
+                                    color="#54abf7"
                                     status={isVisibleSaude ? 'checked' : 'unchecked'}
                                     onPress={!isReadOnly && mostrarCampoSaude} />
                                 <Text style={{ alignSelf: "center" }}>Possui plano de saúde?</Text>
                             </View>
                             <View>
                                 {isVisibleSaude && <TextInput style={styles.campostexto}
+                                    activeOutlineColor="#54abf7"
                                     mode="outlined"
                                     label="Cartão Nacional da Saúde"
                                     keyboardType="numeric"
@@ -456,12 +470,15 @@ const FichaAnamnese = (props) => {
 
                             <View style={{ flexDirection: "row" }}>
                                 <Checkbox.Android
+                                    uncheckedColor="#54abf7"
+                                    color="#54abf7"
                                     status={isVisibleRemedio ? 'checked' : 'unchecked'}
                                     onPress={!isReadOnly && mostrarCampoRemedio} />
                                 <Text style={{ alignSelf: "center" }}>Você toma remédios?</Text>
                             </View>
                             <View>
                                 {isVisibleRemedio && <TextInput style={styles.campostexto}
+                                    activeOutlineColor="#54abf7"
                                     mode="outlined"
                                     label="Remédios utilizados"
                                     onChangeText={(text: string) => setRemediosUtilizados(text)}
@@ -475,6 +492,7 @@ const FichaAnamnese = (props) => {
 
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
+                                activeOutlineColor="#54abf7"
                                 label="CEP"
                                 keyboardType="numeric"
                                 onChangeText={(text: string) => setCep(text)}
@@ -486,6 +504,7 @@ const FichaAnamnese = (props) => {
                             {possuiErro && <HelperText type="error">{errorCep}</HelperText>}
 
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="Estado"
                                 onChangeText={(text: string) => setEstado(text)}
@@ -497,6 +516,7 @@ const FichaAnamnese = (props) => {
                             {possuiErro && <HelperText type="error">{errorEstado}</HelperText>}
 
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="Cidade"
                                 onChangeText={(text: string) => setCidade(text)}
@@ -508,6 +528,7 @@ const FichaAnamnese = (props) => {
 
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
+                                activeOutlineColor="#54abf7"
                                 label="Bairro"
                                 onChangeText={(text: string) => setBairro(text)}
                                 value={bairro}
@@ -519,6 +540,7 @@ const FichaAnamnese = (props) => {
 
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
+                                activeOutlineColor="#54abf7"
                                 label="Rua"
                                 onChangeText={(text: string) => setRua(text)}
                                 value={rua}
@@ -530,6 +552,7 @@ const FichaAnamnese = (props) => {
 
                             <TextInput style={styles.campostexto}
                                 mode="outlined"
+                                activeOutlineColor="#54abf7"
                                 label="Número"
                                 keyboardType="numeric"
                                 onChangeText={(text: string) => setNumero(text)}
@@ -542,6 +565,7 @@ const FichaAnamnese = (props) => {
                             <Text style={styles.textGroup}>Informações Adicionais</Text>
 
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="Médico responsável"
                                 onChangeText={(text: string) => setMedicoResponsavel(text)}
@@ -551,6 +575,7 @@ const FichaAnamnese = (props) => {
 
                             />
                             <TextInput style={styles.campostexto}
+                                activeOutlineColor="#54abf7"
                                 mode="outlined"
                                 label="CRM do médico"
                                 keyboardType="numeric"
@@ -562,6 +587,8 @@ const FichaAnamnese = (props) => {
                             />
                             <View style={{ flexDirection: "row" }}>
                                 <Checkbox.Android
+                                    uncheckedColor="#54abf7"
+                                    color="#54abf7"
                                     status={isVisibleCuidador ? 'checked' : 'unchecked'}
                                     onPress={!isReadOnly && mostrarCampoCuidador}
                                 />
@@ -570,6 +597,7 @@ const FichaAnamnese = (props) => {
                             <View>
                                 {isVisibleCuidador &&
                                     <TextInput style={styles.campostexto}
+                                        activeOutlineColor="#54abf7"
                                         mode="outlined"
                                         label="Nome do Cuidador"
                                         onChangeText={(text: string) => setNomeCuidador(text)}
@@ -582,6 +610,7 @@ const FichaAnamnese = (props) => {
                             <View>
                                 {isVisibleCuidador &&
                                     <TextInput style={styles.campostexto}
+                                        activeOutlineColor="#54abf7"
                                         mode="outlined"
                                         label="CPF"
                                         keyboardType="numeric"

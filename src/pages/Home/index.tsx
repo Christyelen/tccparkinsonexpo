@@ -93,14 +93,14 @@ const Home = () => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingTop:40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="logout" mode="outlined" style={styles.buttomAdm}
+                        <Button icon="logout" mode="outlined" textColor="#54abf7" style={styles.buttomAdm}
                             onPress={() => logout()}>
                             Sair
                         </Button>
-                        {usuarioPossuiPermissao && <Button icon="security" mode="outlined" style={styles.buttomAdm}
+                        {usuarioPossuiPermissao && <Button icon="security" mode="outlined" textColor="#54abf7" style={styles.buttomAdm}
                             onPress={() => navigation.navigate("CadastroAdm")}>
                             Area do administrador
                         </Button>
@@ -109,14 +109,14 @@ const Home = () => {
                     <View style={styles.container}>
                         <Image
                             source={require('../../../assets/imagens/LogoApp.png')}
-                            style={{ width: 200, height: 200, margin: 10, alignSelf: "center" }} />
-                        <Text style={styles.textGroup} > App Parkinson </Text>
+                            style={{ width: 200, height: 200, alignSelf: "center" }} />
+                        <Text style={styles.textGroupLegenda} > DP Move </Text>
                         <Button
                             mode="contained"
                             style={styles.buttom}
                             labelStyle={styles.textButton}
                             onPress={() => navigation.navigate("Niveis")}>
-                            <Text>Níveis</Text>
+                            <Text>Exercicíos</Text>
                         </Button>
 
                         <Button
@@ -124,7 +124,7 @@ const Home = () => {
                             style={styles.buttom}
                             labelStyle={styles.textButton}
                             onPress={() => navigation.navigate("FichaAnamnese", { fichaAnamnese: fichaAnamnese })}>
-                            <Text>Ficha Anamnese</Text>
+                            <Text>Dados do Participante</Text>
                         </Button>
 
                         <Button
@@ -132,7 +132,7 @@ const Home = () => {
                             style={styles.buttom}
                             labelStyle={styles.textButton}
                             onPress={() => navigation.navigate("Ofensiva")}>
-                            <Text>Ofensiva</Text>
+                            <Text>Conquistas</Text>
                         </Button>
 
                         <Button

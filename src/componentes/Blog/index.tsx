@@ -10,12 +10,12 @@ const CardBlog = ({ titulo, descricao, url, imagem }) => {
     return (
         <View style={styles.card}>
             <TouchableRipple onPress={() => handlePress(url)} style={{ marginTop: 20 }}>
-                <Card style={{ backgroundColor: '#eee6fa' }}>
+                <Card style={{ backgroundColor: '#c9e6ff' }}>
                     <Card.Title title={titulo} titleStyle={{ fontWeight: "bold", fontSize: 25, paddingTop:8 }} />
                     <Card.Content>
                         <Paragraph style={{ fontSize: 18 }}>{descricao}</Paragraph>
                     </Card.Content>
-                    <Card.Cover style={{ backgroundColor: '#eee6fa', borderRadius: 0 , padding:8}} source={{ uri: imagem }} />
+                    <Card.Cover style={{ backgroundColor: '#c9e6ff', borderRadius: 0 , padding:8}} source={{ uri: imagem }} />
                 </Card>
             </TouchableRipple>
         </View>
@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         flexDirection: "column",
+        backgroundColor:"#ebf6fa"
     },
 });
 

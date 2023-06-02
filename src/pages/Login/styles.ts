@@ -6,14 +6,21 @@ export const styles = StyleSheet.create({
         padding: 20,
         flexDirection: "column",
         justifyContent: "center",
-        alignItems:"center"
+        alignItems: "center"
+    },
+    loadingContainer: {
+        position: 'relative',
+        borderRadius: 10,
+        padding: 10,
+        color: "#54abf7"
     },
     buttom: {
         marginTop: 50,
+        backgroundColor: '#54abf7',
         height: 60,
         width: '100%'
     },
-    buttonCabecalho:{
+    buttonCabecalho: {
         marginTop: 8
     },
     scroll: {
@@ -21,24 +28,25 @@ export const styles = StyleSheet.create({
     },
     textButton: {
         fontSize: 30,
-        padding: 15,
+        paddingTop: 15,
         width: '100%'
     },
     textGroup: {
         fontSize: 20,
         margin: 8,
         fontWeight: "bold",
-        color: '#663399'
+        color: '#54abf7'
     },
     campostexto: {
         width: '100%',
         marginTop: 5,
+        borderColor: "#54abf7"
     },
     containerBotoes: {
         flexDirection: "row",
-        justifyContent:"space-between",
+        justifyContent: "space-between",
         marginLeft: 20,
-        marginRight:20
+        marginRight: 20
     },
 
 })

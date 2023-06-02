@@ -7,11 +7,10 @@ export const styles = StyleSheet.create({
         flexDirection: "column",
     },
     buttom: {
-        marginTop: 8
+        marginTop: 8,
+        borderColor:"#54abf7"
     },
-    appBar: {
-        backgroundColor: '#f0dbff',
-    },
+   
     scroll: {
         flex: 1,
     }, 
@@ -25,6 +24,6 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         margin: 8,
         fontWeight: "bold",
-        color: '#663399'
+        color: '#54abf7'
     },
 })

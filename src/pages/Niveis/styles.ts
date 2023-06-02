@@ -10,10 +10,8 @@ export const styles = StyleSheet.create({
     },
     buttom: {
         marginTop: 30,
+        backgroundColor:"#54abf7",
         width: 100
-    },
-    appBar:{
-        backgroundColor: '#f0dbff',
     },
     scroll: {
         flex: 1,
@@ -23,6 +21,10 @@ export const styles = StyleSheet.create({
         justifyContent:"space-between",
         marginLeft: 20,
         marginRight:20
+    },
+    buttomCabecalho: {
+        marginTop: 8,
+        borderColor:'#54abf7',
     },
     
 });

@@ -126,28 +126,30 @@ const Ofensiva = (props) => {
     };
 
     let markedDay = {};
-    listaOfensivas.map((item) => {
-        markedDay[item.dataExercicioRealizado] = {
-            selected: true,
-            marked: true,
-            selectedColor: "purple",
-        };
-    });
+    for (let index = 0; index < listaOfensivas.length; index++) {
+        if (auth.currentUser.uid == listaOfensivas[index].usuario){
+            markedDay[listaOfensivas[index].dataExercicioRealizado] = {
+                selected: true,
+                marked: true,
+                selectedColor: "#54abf7",
+            };
+        }
+    };
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop:40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttom}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button onPress={handleShare} style={styles.buttom} mode="outlined"
+                        <Button onPress={handleShare} style={styles.buttom} textColor="#54abf7"  mode="outlined"
                             icon={'share-variant'} >Compartilhar
                         </Button>
                     </View>
-                    <ViewShot ref={viewShotRef} style={{ flex: 1, backgroundColor: '#f9f3fe' }}>
+                    <ViewShot ref={viewShotRef} style={{ flex: 1, backgroundColor: '#ebf6fa' }}>
                         <View style={styles.container}>
                             <Calendar style={{ borderRadius: 10, elevation: 4, margin: 40 }} onDayPress={date => {
                                 console.log(date);
@@ -157,7 +159,7 @@ const Ofensiva = (props) => {
                                 hideExtraDays={true}
                                 markedDates={markedDay}
                             />
-                            <Text style={styles.textGroup}>Você está com uma ofensiva de: {diasOfensiva} dias</Text>
+                            <Text style={styles.textGroup}>Você está há {diasOfensiva} dias realizando exercicios diariamente, parabéns!</Text>
                         </View>
                     </ViewShot>
                 </ScrollView>

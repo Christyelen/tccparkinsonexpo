@@ -7,10 +7,8 @@ export const styles = StyleSheet.create({
         flexDirection: "column",
     },
     buttom: {
-        marginTop: 8
-    },
-    appBar: {
-        backgroundColor: '#f0dbff',
+        marginTop: 8,
+        borderColor:"#54abf7"
     },
     scroll: {
         flex: 1,
@@ -25,13 +23,13 @@ export const styles = StyleSheet.create({
         position: 'relative',
         borderRadius: 10,
         padding: 10,
-        color: "#663399"
+        color: "#54abf7"
     },
     textGroup: {
         fontSize: 20,
         margin: 8,
         fontWeight: "bold",
-        color: '#663399',
+        color: '#54abf7',
         alignSelf: "center"
     },
     campostexto: {

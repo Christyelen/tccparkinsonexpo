@@ -48,7 +48,7 @@ const AprovarCoordenador = () => {
             } else if (acao == "remover" || acao == "removerCoordenador") {
                 Alert.alert(
                     'Excluir',
-                    acao == "remover" ? 'Deseja realmente excluir a solicitação?': 'Deseja realmente excluir este coordenador?',
+                    acao == "remover" ? 'Deseja realmente excluir a solicitação?' : 'Deseja realmente excluir este coordenador?',
                     [
                         {
                             text: 'Sim', onPress: async () => {
@@ -73,10 +73,10 @@ const AprovarCoordenador = () => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop: 40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttom}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
@@ -94,10 +94,10 @@ const AprovarCoordenador = () => {
                                         <DataTable.Cell>{aprovacao.cpf}</DataTable.Cell>
                                         <DataTable.Cell>
                                             <>
-                                                <Button icon="check-circle-outline" style={styles.buttom}
+                                                <Button icon="check-circle-outline" textColor="#54abf7" style={styles.buttom}
                                                     onPress={() => gerenciarCoordenadores(aprovacao.id, "aprovar")}>
                                                 </Button>
-                                                <Button icon="close-circle-outline" style={styles.buttom}
+                                                <Button icon="close-circle-outline" textColor="#54abf7" style={styles.buttom}
                                                     onPress={() => gerenciarCoordenadores(aprovacao.id, "remover")}>
                                                 </Button>
                                             </>
@@ -121,7 +121,7 @@ const AprovarCoordenador = () => {
                                         <DataTable.Cell>{aprovacao.cpf}</DataTable.Cell>
                                         <DataTable.Cell>
                                             <>
-                                                <Button icon="close-circle-outline" style={styles.buttom}
+                                                <Button icon="close-circle-outline" textColor="#54abf7" style={styles.buttom}
                                                     onPress={() => gerenciarCoordenadores(aprovacao.id, "removerCoordenador")}>
                                                 </Button>
                                             </>

@@ -177,19 +177,19 @@ const CadastroBlog = () => {
     return (
 
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop:40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
 
-                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttom}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        {!estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                        {!estaEditando && <Button icon="content-save-outline" buttonColor="#54abf7" mode="contained" style={styles.buttom}
                             onPress={addMateria}>
                             Salvar
                         </Button>}
-                        {estaEditando && <Button icon="content-save-outline" mode="contained" style={styles.buttom}
+                        {estaEditando && <Button icon="content-save-outline" buttonColor="#54abf7" mode="contained" style={styles.buttom}
                             onPress={editarRegistro}>
                             Salvar edição
                         </Button>}
@@ -203,6 +203,7 @@ const CadastroBlog = () => {
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Titulo da Matéria"
+                            activeOutlineColor="#54abf7"
                             onChangeText={(text: string) => setTitulo(text)}
                             value={titulo}
                         />
@@ -210,6 +211,7 @@ const CadastroBlog = () => {
 
                         <TextInput style={styles.campostexto}
                             mode="outlined"
+                            activeOutlineColor="#54abf7"
                             label="Texto da Matéria"
                             multiline
                             numberOfLines={4}
@@ -219,6 +221,7 @@ const CadastroBlog = () => {
                         {possuiErro && <HelperText type="error">{errorDescricao}</HelperText>}
 
                         <TextInput style={styles.campostexto}
+                            activeOutlineColor="#54abf7"
                             mode="outlined"
                             label="Url da matéria"
                             onChangeText={(text: string) => setUrlMateria(text)}
@@ -227,7 +230,7 @@ const CadastroBlog = () => {
                         {possuiErro && <HelperText type="error">{errorURLMateria}</HelperText>}
 
                         <View style={{ flex: 1, alignSelf: 'flex-start', justifyContent: 'flex-start' }}>
-                            <Button icon={'camera'} onPress={() => handleImageSelect()} >Selecione uma imagem</Button>
+                            <Button icon={'camera'} textColor="#54abf7" onPress={() => handleImageSelect()} >Selecione uma imagem</Button>
                             {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
                         </View>
                     </View>
@@ -243,10 +246,10 @@ const CadastroBlog = () => {
                                         <DataTable.Cell>{materia.id}</DataTable.Cell>
                                         <DataTable.Cell>
                                             <>
-                                                <Button icon="pencil-outline" style={styles.buttom}
+                                                <Button icon="pencil-outline" textColor="#54abf7" style={styles.buttom}
                                                     onPress={() => preencherCamposEdicao(materia.id)}>
                                                 </Button>
-                                                <Button icon="trash-can-outline" style={styles.buttom}
+                                                <Button icon="trash-can-outline" textColor="#54abf7" style={styles.buttom}
                                                     onPress={() => excluirRegistro(materia.id)}>
                                                 </Button>
                                             </>

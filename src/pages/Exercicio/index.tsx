@@ -178,14 +178,14 @@ const Exercicio = (props) => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30, backgroundColor: '#f9f3fe', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30,  paddingTop:40,backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="arrow-left-circle" mode="outlined" style={styles.buttom}
+                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttomAdm}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button icon="flag-checkered" mode="contained" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva")}>
+                        <Button icon="flag-checkered" mode="contained"  buttonColor="#54abf7" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva")}>
                             Ofensiva Diária
                         </Button>
                     </View>
