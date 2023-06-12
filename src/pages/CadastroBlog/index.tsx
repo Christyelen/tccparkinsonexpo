@@ -156,7 +156,7 @@ const CadastroBlog = () => {
                     titulo: titulo,
                     descricao: descricao,
                     urlMateria: urlMateria,
-                    urlimage: image ? image : null
+                    urlImage: image ? image : null
                 });
                 limparCampos();
                 exibirAlerta();

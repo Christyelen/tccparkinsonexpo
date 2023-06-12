@@ -80,6 +80,7 @@ const Niveis = () => {
                                 <Button
                                     key={niveis.key}
                                     id={niveis.key}
+                                    labelStyle={styles.textButton}
                                     style={styles.buttom}
                                     onPress={() => navigation.navigate("PreExercicio", { nivel: niveis.value, listaOfensiva: listaPreExercicio})}
                                     mode="contained">

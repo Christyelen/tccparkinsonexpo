@@ -9,12 +9,18 @@ export const styles = StyleSheet.create({
         alignItems:"center"
     },
     buttom: {
-        marginTop: 30,
-        backgroundColor:"#54abf7",
-        width: 100
+        marginTop: 40,
+        backgroundColor: '#54abf7',
+        height: 60,
+        width: '100%'
     },
     scroll: {
         flex: 1,
+    },
+    textButton: {
+        fontSize: 30,
+        paddingTop: 15,
+        width: '100%'
     },
     containerBotoes: {
         flexDirection: "row",

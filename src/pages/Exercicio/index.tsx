@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Alert, SafeAreaView, ScrollView, View, useWindowDimensions } from "react-native";
+import { Alert, SafeAreaView, ScrollView, View, Image, useWindowDimensions } from "react-native";
 import { ActivityIndicator, Button, Dialog, Portal, Provider, Text } from "react-native-paper";
 import { SCREEN_SPACE, VIDEO_HEIGHT, styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
@@ -178,16 +178,16 @@ const Exercicio = (props) => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1, paddingBottom: 30,  paddingTop:40,backgroundColor: '#ebf6fa', }}>
+            <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop: 40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
                         <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttomAdm}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        <Button icon="flag-checkered" mode="contained"  buttonColor="#54abf7" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva")}>
-                            Ofensiva Diária
-                        </Button>
+                        {fimExercicio && <Button icon="flag-checkered" mode="contained" buttonColor="#54abf7" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva")}>
+                            Conquistas
+                        </Button>}
                     </View>
                     <View style={styles.container}>
                         {!fimExercicio && !contemErro && <View style={styles.player}>
@@ -205,17 +205,24 @@ const Exercicio = (props) => {
                             {contemErro && <Text>Alerta: Exercicio não cadastrado corretamente. contate o administrador do sistema</Text>}
                             {!videoReady && !fimExercicio && !contemErro && <ActivityIndicator style={styles.loadingContainer} />}
                             {!fimExercicio && videoAtual <= 3 && !contemErro &&
-                                <Button onPress={proximoExercicio} style={styles.buttom} mode="contained" icon="arrow-right-circle-outline">
-                                    Próximo exercicio
+                                <Button onPress={proximoExercicio} style={styles.buttomTela}
+                                    labelStyle={styles.textButton} mode="contained">
+                                    Próximo exercício
                                 </Button>}
                             {!fimExercicio && videoAtual > 3 && !contemErro &&
-                                <Button onPress={finalizarExercicio} style={styles.buttom} mode="contained" icon="check">
-                                    Finalizar exercicios
+                                <Button onPress={finalizarExercicio} style={styles.buttomTela}
+                                    labelStyle={styles.textButton} mode="contained">
+                                    Finalizar exercícios
                                 </Button>}
+                            {fimExercicio && <Image
+                                source={require('../../../assets/imagens/Trofeu.png')}
+                                style={{ width: 200, height: 200, alignSelf: "center" }} />}
 
                             {fimExercicio && !contemErro &&
-                                <Text>
-                                    Você finalizou seus exercicios diários! Parabéns! Veja sua evolução na página de ofensiva diária.
+                                <Text style={{ margin: 10, fontSize: 30, textAlign: "center" }}>
+                                   <Text style={{ fontWeight: 'bold',textAlign: "center" }}>Parabéns! {`\n`}</Text>
+                                    Você finalizou seus exercicios diários!{`\n`}
+                                    Veja sua evolução na página de  Conquistas.
                                 </Text>}
                         </View>
                     </View>

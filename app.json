@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "DP Move",
-    "slug": "DPMove",
+    "name": "tccparkinsonexpo",
+    "slug": "tccparkinson",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/imagens/icon.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/imagens/icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -43,12 +43,12 @@
     "package": "com.tccparkinsonexpo.DPMove",
     "versionCode": 1,
     "adaptiveIcon": {
-      "foregroundImage": "./assets/imagens/icon.png",
+      "foregroundImage": "./assets/adaptive-icon.png",
       "backgroundColor": "#ffffff"
     }
   },
   "web": {
-    "favicon": "./assets/imagens/icon.png"
+    "favicon": "./assets/favicon.png"
   },
   "extra": {
     "eas": {

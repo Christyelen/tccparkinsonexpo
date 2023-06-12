@@ -76,7 +76,6 @@ const Ofensiva = (props) => {
     }
 
     const calcularDiasDeOfensiva = async () => {
-        console.log("entrou calcular dias")
         let diaAtualContado = false;
         let contadorDiasConsecutivos = 0;
         let ultimoDocumentoData = moment(moment().format('YYYY-MM-DD'), 'YYYY-MM-DD');
@@ -93,7 +92,6 @@ const Ofensiva = (props) => {
 
             if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 0 && !diaAtualContado) {
                 contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
-                console.log(!diaAtualContado)
                 diaAtualContado = true;
             }
         }
@@ -142,7 +140,7 @@ const Ofensiva = (props) => {
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
                         <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttom}
-                            onPress={() => navigation.goBack()}>
+                            onPress={() => navigation.navigate("Home")}>
                             Voltar
                         </Button>
                         <Button onPress={handleShare} style={styles.buttom} textColor="#54abf7"  mode="outlined"
@@ -159,7 +157,7 @@ const Ofensiva = (props) => {
                                 hideExtraDays={true}
                                 markedDates={markedDay}
                             />
-                            <Text style={styles.textGroup}>Você está há {diasOfensiva} dias realizando exercicios diariamente, parabéns!</Text>
+                            <Text style={styles.textGroup}>Você está há {diasOfensiva} dias realizando exercicios diariamente. Parabéns, continue assim!</Text>
                         </View>
                     </ViewShot>
                 </ScrollView>

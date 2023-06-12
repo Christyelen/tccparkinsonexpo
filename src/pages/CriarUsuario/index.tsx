@@ -203,7 +203,7 @@ const CriarUsuario = () => {
                             style={styles.buttom}
                             labelStyle={styles.textButton}
                             onPress={signUp}>
-                            <Text>Criar novo usuário</Text>
+                            <Text>Cadastrar</Text>
                         </Button>
                     </View>
                 </ScrollView>

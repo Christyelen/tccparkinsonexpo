@@ -102,7 +102,7 @@ const Home = () => {
                         </Button>
                         {usuarioPossuiPermissao && <Button icon="security" mode="outlined" textColor="#54abf7" style={styles.buttomAdm}
                             onPress={() => navigation.navigate("CadastroAdm")}>
-                            Area do administrador
+                            Área do administrador
                         </Button>
                         }
                     </View>
@@ -116,7 +116,7 @@ const Home = () => {
                             style={styles.buttom}
                             labelStyle={styles.textButton}
                             onPress={() => navigation.navigate("Niveis")}>
-                            <Text>Exercicíos</Text>
+                            <Text>Exercícios</Text>
                         </Button>
 
                         <Button

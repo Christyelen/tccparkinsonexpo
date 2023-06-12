@@ -2,14 +2,6 @@ import { FirebaseApp, initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Optionally import the services that you want to use
-// import {...} from "firebase/auth";
-// import {...} from "firebase/database";
-// import {...} from "firebase/firestore";
-// import {...} from "firebase/functions";
-// import {...} from "firebase/storage";
-
-// Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDwEGLH9D7SgN7Ed7ZQ-Pa_LfmmXa92U40",
     authDomain: "tccparkinson-8bd90.firebaseapp.com",

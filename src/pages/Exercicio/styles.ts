@@ -23,6 +23,17 @@ export const styles = StyleSheet.create({
     scroll: {
         flex: 1,
     },
+    buttomTela: {
+        marginTop: 40,
+        backgroundColor: '#54abf7',
+        height: 60,
+        width: '100%'
+    },
+    textButton: {
+        fontSize: 30,
+        paddingTop: 15,
+        width: '100%'
+    },
     player: {
 
         alignItems: "center",
@@ -33,7 +44,7 @@ export const styles = StyleSheet.create({
         position: 'relative',
         borderRadius: 10,
         padding: 10,
-        color: "#663399"
+        color: "#54abf7"
     },
     containerBotoes: {
         flexDirection: "row",

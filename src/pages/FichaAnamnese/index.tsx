@@ -8,6 +8,8 @@ import { addDoc, collection, doc, getFirestore, onSnapshot, query, updateDoc, wh
 import { FIRESTORE_DB } from "../../../firebaseConfig";
 import { getAuth } from "firebase/auth";
 import validator from 'validator';
+import { printToFileAsync } from 'expo-print';
+import { shareAsync } from 'expo-sharing';
 
 const FichaAnamnese = (props) => {
     const navigation = useNavigation<propsStack>()
@@ -71,10 +73,7 @@ const FichaAnamnese = (props) => {
             setarCamposReadOnly();
         }
 
-    }, []); // aq coloqcaria a ficha anamnses
-
-    //faze o usecallback
-
+    }, []);
 
     const validarCampos = () => {
         let erros = 0
@@ -291,6 +290,48 @@ const FichaAnamnese = (props) => {
         setReadOnly(!isReadOnly);
     };
 
+    const gerarPDF = async () => {
+    let html = `
+    <html>
+        <body>
+            <h2>Dados do participante:</h2>
+            <p>Nome: ${nome}</p>
+            <p>Sobrenome: ${sobrenome}</p>
+            <p>CPF: ${cpf}</p>
+            <p>RG: ${rg}</p>
+            <p>Data de Nascimento: ${dataNascimento}</p>
+            <p>Sexo: ${sexo}</p>
+            <p>Peso: ${peso}</p>
+            <p>Altura: ${altura}</p>
+            <p>Telefone: ${telefone}</p>
+            <p>Email: ${email}</p>
+            <p>Ano de Diagnóstico: ${anoDiagnostico}</p>
+            <p>Possui Plano de Saúde: ${possuiPlano}</p>
+            <p>Cartão do Plano de Saúde: ${cartaoPlano}</p>
+            <p>Usa Medicamentos: ${usoRemedios}</p>
+            <p>Medicamentos Utilizados: ${remediosUtilizados}</p>
+            <p>CEP: ${cep}</p>
+            <p>Estado: ${estado}</p>
+            <p>Cidade: ${cidade}</p>
+            <p>Bairro: ${bairro}</p>
+            <p>Rua: ${rua}</p>
+            <p>Número: ${numero}</p>
+            <p>Médico Responsável: ${medicoResponsavel}</p>
+            <p>CRM do Médico: ${crmMedico}</p>
+            <p>Possui Cuidador: ${possuiCuidador}</p>
+            <p>Nome do Cuidador: ${nomeCuidador}</p>
+            <p>CPF do Cuidador: ${cpfCuidador}</p>
+        </body>
+    </html>`;
+
+        const file = await printToFileAsync({
+            html: html,
+            base64: false,
+        });
+
+        await shareAsync(file.uri);
+    }
+
     return (
         <>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop: 40, backgroundColor: '#ebf6fa', }}>
@@ -304,11 +345,14 @@ const FichaAnamnese = (props) => {
                                 onPress={() => navigation.goBack()}>
                                 Voltar
                             </Button>
+                            <Button icon="file-pdf-box" mode="outlined" textColor="#54abf7" style={styles.buttom}
+                                onPress={gerarPDF}>
+                                Gerar PDF
+                            </Button>
                             {!isReadOnly && <Button icon="content-save-outline" mode="contained" buttonColor="#54abf7" style={styles.buttom}
                                 onPress={salvarCampos}>
                                 Salvar
                             </Button>}
-
                             {isReadOnly && <Button icon="pencil-outline" mode="contained" buttonColor="#54abf7" style={styles.buttom}
                                 onPress={salvarCampos}>
                                 Editar
