@@ -38,7 +38,6 @@ const Exercicio = (props) => {
     const buscarOfensivas = async () => {
         try {
             const ofensivasRef = collection(FIRESTORE_DB, 'ofensiva');
-            const q = query(ofensivasRef, where('idPessoa', '==', '')); //colocar o IdPessoa
             const subscriber = onSnapshot(ofensivasRef, {
                 next: (snapshot) => {
                     const ofensivas: any[] = [];
@@ -181,11 +180,11 @@ const Exercicio = (props) => {
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop: 40, backgroundColor: '#ebf6fa', }}>
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
-                        <Button icon="arrow-left-circle" mode="outlined" textColor="#54abf7" style={styles.buttomAdm}
+                        <Button mode="outlined" textColor="#54abf7" style={styles.buttomAdm}
                             onPress={() => navigation.goBack()}>
                             Voltar
                         </Button>
-                        {fimExercicio && <Button icon="flag-checkered" mode="contained" buttonColor="#54abf7" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva")}>
+                        {fimExercicio && <Button  mode="contained" buttonColor="#54abf7" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva")}>
                             Conquistas
                         </Button>}
                     </View>
@@ -203,7 +202,7 @@ const Exercicio = (props) => {
                         </View>}
                         <View>
                             {contemErro && <Text>Alerta: Exercicio não cadastrado corretamente. contate o administrador do sistema</Text>}
-                            {!videoReady && !fimExercicio && !contemErro && <ActivityIndicator style={styles.loadingContainer} />}
+                            {!videoReady && !fimExercicio && !contemErro && <ActivityIndicator color="#54abf7" style={styles.loadingContainer} />}
                             {!fimExercicio && videoAtual <= 3 && !contemErro &&
                                 <Button onPress={proximoExercicio} style={styles.buttomTela}
                                     labelStyle={styles.textButton} mode="contained">

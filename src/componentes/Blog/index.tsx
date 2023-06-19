@@ -13,9 +13,11 @@ const CardBlog = ({ titulo, descricao, url, imagem }) => {
                 <Card style={{ backgroundColor: '#c9e6ff' }}>
                     <Card.Title title={titulo} titleStyle={{ fontWeight: "bold", fontSize: 25, paddingTop:8 }} />
                     <Card.Content>
-                        <Paragraph style={{ fontSize: 18 }}>{descricao}</Paragraph>
+                        <Paragraph style={{ fontSize: 18, marginBottom: 10 }}>{descricao}</Paragraph>
                     </Card.Content>
+                    {imagem != '' && 
                     <Card.Cover style={{ backgroundColor: '#c9e6ff', borderRadius: 0 , padding:8}} source={{ uri: imagem }} />
+                    }
                 </Card>
             </TouchableRipple>
         </View>

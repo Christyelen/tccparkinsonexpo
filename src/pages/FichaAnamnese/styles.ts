@@ -18,8 +18,8 @@ export const styles = StyleSheet.create({
     containerBotoes: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginLeft: 20,
-        marginRight: 20
+        marginLeft: 10,
+        marginRight: 10
     },
     textGroup: {
         fontSize: 20,

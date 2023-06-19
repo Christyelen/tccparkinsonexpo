@@ -133,15 +133,15 @@ const Login = () => {
                             mode="contained"
                             style={styles.buttom}
                             labelStyle={styles.textButton}
-                            onPress={() => { navigation.navigate("CriarUsuario") }}>
-                            <Text>Criar novo usuário</Text>
+                            onPress={signIn}>
+                            <Text>Entrar</Text>
                         </Button>
                         <Button
                             mode="contained"
                             style={styles.buttom}
                             labelStyle={styles.textButton}
-                            onPress={signIn}>
-                            <Text>Entrar</Text>
+                            onPress={() => { navigation.navigate("CriarUsuario") }}>
+                            <Text>Criar novo usuário</Text>
                         </Button>
                     </View>
                 </ScrollView>
