@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, Linking } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { propsStack } from "../../routes/Stack/Models";
 import { Badge, Button, Checkbox, HelperText, TextInput } from "react-native-paper";
@@ -8,7 +8,8 @@ import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } f
 import { addDoc, collection } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
 import validator from 'validator';
-//import * from 'react-native-mail-composer';
+import qs from 'qs';
+
 
 
 const CriarUsuario = () => {
@@ -60,6 +61,23 @@ const CriarUsuario = () => {
 
     const addUsuario = async (usuario, cpf) => {
         const doc = await addDoc(collection(FIRESTORE_DB, 'usuario'), { usuario: usuario, cpf: cpf, coordenador: false, solicitacao: coordenador });
+        enviarEmail(cpf);
+    }
+
+    const enviarEmail = async (cpf) => {
+        let url = `mailto:${EMAIL_ADM}`;
+        const query = qs.stringify({
+            subject:'Nova solicitação de coordenador',
+            body: `Um usuário solicitou a permissão de coordenador, possuindo o CPF: ${cpf}. \n Avalie a solicitação no Firebase.`,
+        });
+        if (query.length) {
+            url += `?${query}`;
+        }
+        const canOpen = await Linking.canOpenURL(url);
+        if (!canOpen) {
+            throw new Error('URL não está funcionando');
+        }
+        return Linking.openURL(url);
     }
 
     const toggleShowPassword = () => {
@@ -173,9 +191,9 @@ const CriarUsuario = () => {
                         <View style={{ flexDirection: "row", flex: 1, alignSelf: "flex-start", marginTop: 10 }}>
                             <Checkbox.Android
                                 status={isChecked ? 'checked' : 'unchecked'}
-                                onPress={handleCheckboxChange} 
+                                onPress={handleCheckboxChange}
                                 uncheckedColor="#54abf7"
-                                color="#54abf7"  />
+                                color="#54abf7" />
                             <Text style={{ alignSelf: "center" }}>Perfil de coordenador?</Text>
                         </View>
                         <View style={{ flexDirection: "row", flex: 1 }}>

@@ -34,6 +34,7 @@ const FichaAnamnese = (props) => {
     const [cartaoPlano, setCartaoPlano] = useState('')
     const [usoRemedios, setUsoRemedios] = useState(false)
     const [remediosUtilizados, setRemediosUtilizados] = useState('')
+    const [horarioUsoRemedios, setHorarioUsoRemedios] = useState('')
     const [cep, setCep] = useState('')
     const [estado, setEstado] = useState('')
     const [cidade, setCidade] = useState('')
@@ -177,6 +178,7 @@ const FichaAnamnese = (props) => {
             mostrarCampoRemedio();
         }
         setRemediosUtilizados(userData.remediosUtilizados);
+        setHorarioUsoRemedios(userData.horarioUsoRemedios);
         setCep(userData.cep);
         setEstado(userData.estado);
         setCidade(userData.cidade);
@@ -224,6 +226,7 @@ const FichaAnamnese = (props) => {
         cartaoPlano: possuiPlano ? cartaoPlano : '',
         usoRemedios: usoRemedios,
         remediosUtilizados: usoRemedios ? remediosUtilizados : '',
+        horarioUsoRemedios : horarioUsoRemedios,
         cep: cep,
         estado: estado,
         cidade: cidade,
@@ -291,7 +294,10 @@ const FichaAnamnese = (props) => {
     };
 
     const gerarPDF = async () => {
-    let html = `
+        var possuiPlanoSaude = possuiPlano == true ? "Sim" : "Não";
+        var temCuidador = possuiCuidador == true ? "Sim" : "Não";
+        var usaRemedios = usoRemedios == true ? "Sim" : "Não";
+        let html = `
     <html>
         <body>
             <h2>Dados do participante:</h2>
@@ -306,10 +312,11 @@ const FichaAnamnese = (props) => {
             <p>Telefone: ${telefone}</p>
             <p>Email: ${email}</p>
             <p>Ano de Diagnóstico: ${anoDiagnostico}</p>
-            <p>Possui Plano de Saúde: ${possuiPlano}</p>
+            <p>Possui Plano de Saúde: ${possuiPlanoSaude}</p>
             <p>Cartão do Plano de Saúde: ${cartaoPlano}</p>
-            <p>Usa Medicamentos: ${usoRemedios}</p>
+            <p>Usa Medicamentos: ${usaRemedios}</p>
             <p>Medicamentos Utilizados: ${remediosUtilizados}</p>
+            <p>Horário para ingerir o medicamento: ${horarioUsoRemedios}</p>
             <p>CEP: ${cep}</p>
             <p>Estado: ${estado}</p>
             <p>Cidade: ${cidade}</p>
@@ -318,7 +325,7 @@ const FichaAnamnese = (props) => {
             <p>Número: ${numero}</p>
             <p>Médico Responsável: ${medicoResponsavel}</p>
             <p>CRM do Médico: ${crmMedico}</p>
-            <p>Possui Cuidador: ${possuiCuidador}</p>
+            <p>Possui Cuidador: ${temCuidador}</p>
             <p>Nome do Cuidador: ${nomeCuidador}</p>
             <p>CPF do Cuidador: ${cpfCuidador}</p>
         </body>
@@ -527,6 +534,16 @@ const FichaAnamnese = (props) => {
                                     label="Remédios utilizados"
                                     onChangeText={(text: string) => setRemediosUtilizados(text)}
                                     value={remediosUtilizados}
+                                    editable={!isReadOnly}
+                                    theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
+
+                                />}
+                                {isVisibleRemedio && <TextInput style={styles.campostexto}
+                                    activeOutlineColor="#54abf7"
+                                    mode="outlined"
+                                    label="Horário para ingerir os remédios"
+                                    onChangeText={(text: string) => setHorarioUsoRemedios(text)}
+                                    value={horarioUsoRemedios}
                                     editable={!isReadOnly}
                                     theme={isReadOnly && { colors: { background: '#F2F2F2' } }}
 

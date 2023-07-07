@@ -199,7 +199,7 @@ const CadastroBlog = () => {
                     <View style={styles.container}>
                         {mostrarAlerta && <Badge style={{ backgroundColor: '#90ee90', alignSelf: "center", width: '80%', height: 35, fontSize: 25, color: '#000000', padding: 10 }}>Salvo com sucesso!</Badge>}
 
-                        <Text style={styles.textGroup}>Dados da matéria</Text>
+                        <Text style={styles.textGroup}>Cadastrar nova matéria</Text>
                         <TextInput style={styles.campostexto}
                             mode="outlined"
                             label="Titulo da Matéria"

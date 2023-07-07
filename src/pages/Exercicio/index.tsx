@@ -155,18 +155,6 @@ const Exercicio = (props) => {
         addOfensiva();
     }
 
-    const onChangeState = useCallback((state) => {
-        if (state === PLAYER_STATES.ENDED) {
-            //video deveria ficar em looping mas so passa 2x
-        }
-        else if (state === PLAYER_STATES.PLAYING) {
-
-        }
-        else if (state === PLAYER_STATES.PAUSED) {
-            console.log("Passou no pause")
-        }
-    }, []);
-
     const onFullScreenChange = useCallback((isfullscreen: boolean) => {
         if (isfullscreen) {
             ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -181,10 +169,10 @@ const Exercicio = (props) => {
                 <ScrollView style={styles.scroll}>
                     <View style={styles.containerBotoes}>
                         <Button mode="outlined" textColor="#54abf7" style={styles.buttomAdm}
-                            onPress={() => navigation.goBack()}>
+                            onPress={() => navigation.goBack()} icon="arrow-left-circle" >
                             Voltar
                         </Button>
-                        {fimExercicio && <Button  mode="contained" buttonColor="#54abf7" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva")}>
+                        {fimExercicio && <Button icon="flag-checkered"  mode="contained" buttonColor="#54abf7" style={styles.buttom} onPress={() => navigation.navigate("Ofensiva")}>
                             Conquistas
                         </Button>}
                     </View>
@@ -195,7 +183,6 @@ const Exercicio = (props) => {
                                 width={VIDEO_WIDTH}
                                 play={isPlaying}
                                 videoId={idVideo}
-                                onChangeState={onChangeState}
                                 onReady={() => setVideoReady(true)}
                                 onFullScreenChange={onFullScreenChange}
                             />

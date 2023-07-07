@@ -52,7 +52,26 @@ const Login = () => {
         if (validarCampos()) {
             const user = signInWithEmailAndPassword(auth, email, password).then(userCredentials => {
                 const user = userCredentials.user;
-            }).catch(error => alert(error.message));
+            }).catch(error => {
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        setErrorEmail('Email inválido. Por favor, verifique o email digitado.');
+                        setPossuiErro(true);
+                        break;
+                    case 'auth/invalid-email':
+                        setErrorEmail('Email inválido. Por favor, verifique o email digitado.');
+                        setPossuiErro(true);
+                    case 'auth/wrong-password':
+                        setErrorSenha('Senha incorreta. Por favor, tente novamente.');
+                        setPossuiErro(true);
+                    case 'auth/too-many-requests':
+                        setErrorSenha('Muitas tentativas de login. Por favor, tente novamente mais tarde.');
+                        setPossuiErro(true);
+                    default:
+                        alert(error.message)
+                        break;
+                }
+            });
         }
     }
 

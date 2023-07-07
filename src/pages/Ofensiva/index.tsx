@@ -84,14 +84,21 @@ const Ofensiva = (props) => {
             const dataOfensiva = moment(listaOfensivasData[index], 'YYYY-MM-DD');
 
             if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 1) {
+                console.log("dentro primeiro if : "+ ultimoDocumentoData.format('YYYY-MM-DD') + " data ofensiva: " + dataOfensiva.format('YYYY-MM-DD'))
+
+                console.log("dentro primeiro if : ")
                 contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
+                console.log(contadorDiasConsecutivos)
+
                 ultimoDocumentoData = dataOfensiva;
-                diaAtualContado = false;
                 continue;
             }
+            else if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 0 && !diaAtualContado) {
+                console.log("dentro segundo if: "+ ultimoDocumentoData.format('YYYY-MM-DD') + " data ofensiva: " + dataOfensiva.format('YYYY-MM-DD'))
 
-            if (ultimoDocumentoData.diff(dataOfensiva, 'days') === 0 && !diaAtualContado) {
                 contadorDiasConsecutivos = contadorDiasConsecutivos + 1;
+                console.log(contadorDiasConsecutivos)
+
                 diaAtualContado = true;
             }
         }
@@ -134,6 +141,17 @@ const Ofensiva = (props) => {
         }
     };
 
+    const gerarTexto = () => {
+       var texto =  `Você está há ${diasOfensiva} dia realizando exercicios diariamente. Parabéns, continue assim!`;
+
+        if(diasOfensiva == 0){
+            texto =  `Você está há ${diasOfensiva} dias realizando exercicios diariamente. Vá para a página de exercícios e realize seu exercício diário!`;
+        }
+        else if (diasOfensiva == 1){
+            texto =  `Você está há ${diasOfensiva} dia realizando exercicios diariamente. Parabéns, continue assim!`;
+        }
+       return texto;
+      }
     return (
         <>
             <SafeAreaView style={{ flex: 1, paddingBottom: 30, paddingTop:40, backgroundColor: '#ebf6fa', }}>
@@ -157,7 +175,7 @@ const Ofensiva = (props) => {
                                 hideExtraDays={true}
                                 markedDates={markedDay}
                             />
-                            <Text style={styles.textGroup}>Você está há {diasOfensiva} dias realizando exercicios diariamente. Parabéns, continue assim!</Text>
+                            <Text style={styles.textGroup}>{gerarTexto()}</Text>
                         </View>
                     </ViewShot>
                 </ScrollView>
