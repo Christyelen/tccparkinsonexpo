@@ -61,13 +61,15 @@ const CriarUsuario = () => {
 
     const addUsuario = async (usuario, cpf) => {
         const doc = await addDoc(collection(FIRESTORE_DB, 'usuario'), { usuario: usuario, cpf: cpf, coordenador: false, solicitacao: coordenador });
-        enviarEmail(cpf);
+        if (cpf != "") {
+            enviarEmail(cpf);
+        }
     }
 
     const enviarEmail = async (cpf) => {
         let url = `mailto:${EMAIL_ADM}`;
         const query = qs.stringify({
-            subject:'Nova solicitação de coordenador',
+            subject: 'Nova solicitação de coordenador',
             body: `Um usuário solicitou a permissão de coordenador, possuindo o CPF: ${cpf}. \n Avalie a solicitação no Firebase.`,
         });
         if (query.length) {
